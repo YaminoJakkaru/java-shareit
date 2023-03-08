@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -27,7 +26,7 @@ public class UserController {
 
     @PostMapping
     public User create(@RequestBody @Valid UserDto userDto) {
-        return userService.addUser(UserMapper.toUser(userDto));
+        return userService.addUser(userDto.toUser());
     }
 
     @PatchMapping("/{userId}")

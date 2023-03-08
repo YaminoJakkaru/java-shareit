@@ -2,6 +2,7 @@ package ru.practicum.shareit.user.model;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -16,5 +17,13 @@ public class User {
 
     @Email
     private String email;
+
+    public  UserDto toUserDto() {
+        return UserDto.builder()
+                .id(this.getId())
+                .name(this.getName())
+                .email(this.getEmail())
+                .build();
+    }
 
 }

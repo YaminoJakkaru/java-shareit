@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -30,7 +29,7 @@ public class ItemController {
 
     @PostMapping
     public Item create(@RequestHeader("X-Sharer-User-Id") int userId, @RequestBody @Valid ItemDto itemDto) {
-        return itemService.addItem(userId, ItemMapper.toItem(itemDto));
+        return itemService.addItem(userId, itemDto.toItem());
     }
 
     @PatchMapping("/{itemId}")
