@@ -1,9 +1,7 @@
 package ru.practicum.shareit.user.storage.inMemory;
-
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

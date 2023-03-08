@@ -10,8 +10,6 @@ import ru.practicum.shareit.item.storage.ItemStorage;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
-
-import javax.validation.ValidationException;
 import java.util.List;
 
 @Service

@@ -1,12 +1,8 @@
 package ru.practicum.shareit.user.model;
-
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.user.dto.UserDto;
-
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Data
 @Builder

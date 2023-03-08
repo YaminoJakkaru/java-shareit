@@ -1,9 +1,7 @@
 package ru.practicum.shareit.item.dto;
-
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.item.model.Item;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
