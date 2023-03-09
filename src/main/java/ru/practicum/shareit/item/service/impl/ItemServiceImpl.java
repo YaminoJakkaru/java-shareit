@@ -19,8 +19,6 @@ public class ItemServiceImpl implements ItemService {
     private final UserStorage userStorage;
     public final ItemStorage itemStorage;
 
-    private int id = 0;
-
     @Autowired
     public ItemServiceImpl(UserStorage userStorage, ItemStorage itemStorage) {
         this.userStorage = userStorage;
@@ -34,10 +32,7 @@ public class ItemServiceImpl implements ItemService {
             log.warn("Попытка получить несучествующий аккаунт");
             throw new UserNotFoundException();
         }
-
-        item.setId(++id);
         item.setOwner(user);
-        log.info("Добавлен предмет " + id);
         return itemStorage.addItem(item);
     }
 
@@ -64,7 +59,6 @@ public class ItemServiceImpl implements ItemService {
         if (newItem.getAvailable() != null && newItem.getAvailable() != item.getAvailable()) {
             item.setAvailable(newItem.getAvailable());
         }
-        log.info("Изменены данные придмета " + itemId);
         return itemStorage.updateItem(item);
     }
 

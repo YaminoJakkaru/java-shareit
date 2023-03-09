@@ -1,4 +1,5 @@
 package ru.practicum.shareit.user.storage.inMemory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
@@ -8,25 +9,27 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Integer, User> users = new HashMap<>();
 
-    public InMemoryUserStorage() {
-    }
+    private int id = 0;
 
     @Override
     public User addUser(User user) {
-        users.put(user.getId(), user);
+        user.setId(++id);
+        users.put(id, user);
+        log.info("Создан аккаунт " + id);
         return user;
     }
 
     @Override
     public User updateUser(User user) {
         users.put(user.getId(), user);
+        log.info("Обновлены данные аккаунта " + id);
         return user;
     }
-
 
     @Override
     public Optional<User> findUserByEmail(String email) {

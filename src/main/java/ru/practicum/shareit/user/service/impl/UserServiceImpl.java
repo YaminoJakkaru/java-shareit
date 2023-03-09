@@ -15,8 +15,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserStorage userStorage;
 
-    private int id = 0;
-
     @Autowired
     public UserServiceImpl(UserStorage userStorage) {
         this.userStorage = userStorage;
@@ -29,8 +27,6 @@ public class UserServiceImpl implements UserService {
             log.warn("Попытка создать аккаунт с уже сществующей почтой");
             throw new ValidationException();
         }
-        user.setId(++id);
-        log.info("Создан аккаунт " + id);
         return userStorage.addUser(user);
     }
 
@@ -51,7 +47,6 @@ public class UserServiceImpl implements UserService {
             }
             user.setEmail(newUser.getEmail());
         }
-        log.info("Обновлен аккаунт " + useId);
         return userStorage.updateUser(user);
     }
 
