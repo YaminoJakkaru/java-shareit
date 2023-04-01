@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface BookingRepository extends JpaRepository<Booking,Long> {
+public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Booking findBookingById(int bookingId);
 
@@ -19,12 +19,12 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
             int bookerId, LocalDateTime start, LocalDateTime end);
 
     List<Booking> findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(int bookerId,
-                                                                                  LocalDateTime end);
+                                                                    LocalDateTime end);
 
     List<Booking> findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(int bookerId,
-                                                                                   LocalDateTime start);
+                                                                     LocalDateTime start);
 
-    List<Booking> findBookingsByBookerIdAndStatusIsOrderByIdDesc(int bookerId,Status status);
+    List<Booking> findBookingsByBookerIdAndStatusIsOrderByIdDesc(int bookerId, Status status);
 
     List<Booking> findBookingsByItemOwnerIdOrderByIdDesc(int OwnerId);
 
@@ -40,9 +40,9 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     List<Booking> findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(int OwnerId, Status status);
 
 
-    List<Booking> findBookingsByItemIdAndStatusIsNot(int itemId,Status status);
+    List<Booking> findBookingsByItemIdAndStatusIsNot(int itemId, Status status);
 
     Booking findFirstBookingsByBookerIdAndItemId(int bookerId, int itemId);
 
-    List<Booking> findBookingsByItemOwnerIdAndStatusIsNot(int userId,Status status);
+    List<Booking> findBookingsByItemOwnerIdAndStatusIsNot(int userId, Status status);
 }
