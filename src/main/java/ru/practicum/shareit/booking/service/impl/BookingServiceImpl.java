@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.exception.BookingNotFoundException;
-import ru.practicum.shareit.booking.exception.WrongStatusException;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.booking.vo.State;
 import ru.practicum.shareit.booking.vo.Status;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
@@ -105,26 +105,25 @@ public class BookingServiceImpl implements BookingService {
             log.warn("Попытка получить несучествующий аккаунт");
             throw new UserNotFoundException();
         }
-        switch (state){
-            case "ALL":
+        switch (State.valueOf(state)){
+            case ALL:
                return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookerId);
-            case "CURRENT":
+            case CURRENT:
                 return  bookingRepository.
                         findBookingsByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdDesc(bookerId,
                         LocalDateTime.now(),LocalDateTime.now());
-            case "PAST":
+            case PAST:
                 return bookingRepository.
                         findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(bookerId,LocalDateTime.now());
-            case "FUTURE":
+            case FUTURE:
                 return bookingRepository.
                         findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(bookerId,LocalDateTime.now());
-            case "WAITING":
+            case WAITING:
                 return  bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId,Status.WAITING);
-            case "REJECTED":
+            case REJECTED:
                 return bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId,Status.REJECTED);
             default:
-                log.warn("Функции несуществует");
-                throw new WrongStatusException("Unknown state: UNSUPPORTED_STATUS");
+                return null;
         }
     }
 
@@ -135,26 +134,25 @@ public class BookingServiceImpl implements BookingService {
             log.warn("Попытка получить несучествующий аккаунт");
             throw new UserNotFoundException();
         }
-        switch (state){
-            case "ALL":
+        switch (State.valueOf(state)){
+            case ALL:
                 return bookingRepository.findBookingsByItemOwnerIdOrderByIdDesc(ownerId);
-            case "CURRENT":
+            case CURRENT:
                 return  bookingRepository.
                         findBookingsByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByIdDesc(ownerId,
                         LocalDateTime.now(),LocalDateTime.now());
-            case "PAST":
+            case PAST:
                 return bookingRepository.findBookingsByItemOwnerIdAndEndIsBeforeOrderByIdDesc(ownerId,
                         LocalDateTime.now());
-            case "FUTURE":
+            case FUTURE:
                 return bookingRepository.findBookingsByItemOwnerIdAndStartIsAfterOrderByIdDesc(ownerId,
                         LocalDateTime.now());
-            case "WAITING":
+            case WAITING:
                 return  bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId,Status.WAITING);
-            case "REJECTED":
+            case REJECTED:
                 return bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId,Status.REJECTED);
             default:
-                log.warn("Функции несуществует");
-                throw new WrongStatusException("Unknown state: UNSUPPORTED_STATUS");
+                return null;
         }
     }
 }

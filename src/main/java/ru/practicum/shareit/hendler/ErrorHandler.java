@@ -4,7 +4,6 @@ package ru.practicum.shareit.hendler;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.exception.BookingNotFoundException;
-import ru.practicum.shareit.booking.exception.WrongStatusException;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.user.service.impl.exception.EmailException;
 import ru.practicum.shareit.user.service.impl.exception.UserNotFoundException;
@@ -49,8 +48,8 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public  Map<String, String> handle(final WrongStatusException e) {
-         return Map.of("error", e.getMessage());
+    public  Map<String, String> handle(final IllegalArgumentException e) {
+         return Map.of("error", "Unknown state: UNSUPPORTED_STATUS");
     }
 
 
