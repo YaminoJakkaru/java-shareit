@@ -1,11 +1,7 @@
 package ru.practicum.shareit.user.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-
 import lombok.experimental.Accessors;
 import ru.practicum.shareit.user.dto.UserDto;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 

@@ -44,7 +44,7 @@ public class ItemDto {
 
 
 
-    public  Item toItem() {
+    public  Item toItem(){
         return new Item()
                 .setId(this.getId())
                 .setName(this.getName())
@@ -57,10 +57,10 @@ public class ItemDto {
                .max(Comparator.comparing(Booking::getStart)).orElse(null);
         Booking bookingNext=bookings.stream().filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                .min(Comparator.comparing(Booking::getStart)).orElse(null);
-        if(bookingLast != null) {
+        if (bookingLast != null) {
             this.lastBooking = bookingLast.toBookingDto();
         }
-        if(bookingNext != null){
+        if (bookingNext != null) {
             this.nextBooking = bookingNext.toBookingDto();
         }
     }

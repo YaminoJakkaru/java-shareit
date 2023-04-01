@@ -109,15 +109,15 @@ public class BookingServiceImpl implements BookingService {
             case ALL:
                 return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookerId);
             case CURRENT:
-                return bookingRepository.
-                        findBookingsByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(bookerId,
+                return bookingRepository
+                        .findBookingsByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(bookerId,
                                 LocalDateTime.now(), LocalDateTime.now());
             case PAST:
-                return bookingRepository.
-                        findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(bookerId, LocalDateTime.now());
+                return bookingRepository
+                        .findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(bookerId, LocalDateTime.now());
             case FUTURE:
-                return bookingRepository.
-                        findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(bookerId, LocalDateTime.now());
+                return bookingRepository
+                        .findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(bookerId, LocalDateTime.now());
             case WAITING:
                 return bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId, Status.WAITING);
             case REJECTED:
@@ -138,8 +138,8 @@ public class BookingServiceImpl implements BookingService {
             case ALL:
                 return bookingRepository.findBookingsByItemOwnerIdOrderByIdDesc(ownerId);
             case CURRENT:
-                return bookingRepository.
-                        findBookingsByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(ownerId,
+                return bookingRepository
+                        .findBookingsByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(ownerId,
                                 LocalDateTime.now(), LocalDateTime.now());
             case PAST:
                 return bookingRepository.findBookingsByItemOwnerIdAndEndIsBeforeOrderByIdDesc(ownerId,

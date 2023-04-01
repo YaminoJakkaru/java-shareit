@@ -15,29 +15,25 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findBookingsByBookerIdOrderByIdDesc(int bookerId);
 
-    List<Booking> findBookingsByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(
-            int bookerId, LocalDateTime start, LocalDateTime end);
+    List<Booking> findBookingsByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(int bookerId, LocalDateTime start,
+                                                                                  LocalDateTime end);
 
-    List<Booking> findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(int bookerId,
-                                                                    LocalDateTime end);
+    List<Booking> findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(int bookerId, LocalDateTime end);
 
-    List<Booking> findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(int bookerId,
-                                                                     LocalDateTime start);
+    List<Booking> findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(int bookerId, LocalDateTime start);
 
     List<Booking> findBookingsByBookerIdAndStatusIsOrderByIdDesc(int bookerId, Status status);
 
-    List<Booking> findBookingsByItemOwnerIdOrderByIdDesc(int OwnerId);
+    List<Booking> findBookingsByItemOwnerIdOrderByIdDesc(int ownerId);
 
-    List<Booking> findBookingsByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(
-            int OwnerId, LocalDateTime start, LocalDateTime end);
+    List<Booking> findBookingsByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(int ownerId, LocalDateTime start,
+                                                                                     LocalDateTime end);
 
-    List<Booking> findBookingsByItemOwnerIdAndEndIsBeforeOrderByIdDesc(
-            int OwnerId, LocalDateTime end);
+    List<Booking> findBookingsByItemOwnerIdAndEndIsBeforeOrderByIdDesc(int ownerId, LocalDateTime end);
 
-    List<Booking> findBookingsByItemOwnerIdAndStartIsAfterOrderByIdDesc(
-            int OwnerId, LocalDateTime start);
+    List<Booking> findBookingsByItemOwnerIdAndStartIsAfterOrderByIdDesc(int ownerId, LocalDateTime start);
 
-    List<Booking> findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(int OwnerId, Status status);
+    List<Booking> findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(int ownerId, Status status);
 
 
     List<Booking> findBookingsByItemIdAndStatusIsNot(int itemId, Status status);
