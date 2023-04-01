@@ -23,30 +23,30 @@ public class BookingController {
     }
 
     @PostMapping
-    public Booking create (@RequestHeader("X-Sharer-User-Id") int userId, @RequestBody @Valid BookingDto bookingDto){
-        return bookingService.addBooking(userId,bookingDto);
+    public Booking create(@RequestHeader("X-Sharer-User-Id") int userId, @RequestBody @Valid BookingDto bookingDto) {
+        return bookingService.addBooking(userId, bookingDto);
     }
 
     @PatchMapping("/{bookingId}")
-    public Booking updateStatus(@RequestHeader("X-Sharer-User-Id") int userId,@PathVariable int bookingId,
-                                @RequestParam boolean approved){
-        return bookingService.updateStatus(userId,bookingId,approved);
+    public Booking updateStatus(@RequestHeader("X-Sharer-User-Id") int userId, @PathVariable int bookingId,
+                                @RequestParam boolean approved) {
+        return bookingService.updateStatus(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public  Booking findBookingById(@RequestHeader("X-Sharer-User-Id") int userId,@PathVariable @NotNull int bookingId){
-        return bookingService.findBookingById(userId,bookingId);
+    public Booking findBookingById(@RequestHeader("X-Sharer-User-Id") int userId, @PathVariable @NotNull int bookingId) {
+        return bookingService.findBookingById(userId, bookingId);
     }
 
     @GetMapping
     public List<Booking> getBookingsByUserId(@RequestHeader("X-Sharer-User-Id") int userId,
-                                             @RequestParam (defaultValue = "ALL") String state){
-        return  bookingService.getBookingsByUserId(userId,state);
+                                             @RequestParam(defaultValue = "ALL") String state) {
+        return bookingService.getBookingsByUserId(userId, state);
     }
 
     @GetMapping("/owner")
     List<Booking> getBookingsByOwnerId(@RequestHeader("X-Sharer-User-Id") int userId,
-                                      @RequestParam (defaultValue = "ALL") String state){
-        return  bookingService.getBookingsByItemsOwnerId(userId,state);
+                                       @RequestParam(defaultValue = "ALL") String state) {
+        return bookingService.getBookingsByItemsOwnerId(userId, state);
     }
 }

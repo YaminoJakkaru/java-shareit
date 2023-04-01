@@ -1,4 +1,5 @@
 package ru.practicum.shareit.booking.dto;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 import ru.practicum.shareit.booking.model.Booking;
@@ -26,8 +27,9 @@ public class BookingDto {
     String itemName;
     int bookerId;
     Status status;
+
     public Booking toBooking() {
-        return  new Booking()
+        return new Booking()
                 .setStart(this.getStart())
                 .setEnd(this.getEnd());
 

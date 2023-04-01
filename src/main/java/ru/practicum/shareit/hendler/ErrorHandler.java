@@ -48,8 +48,8 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public  Map<String, String> handle(final IllegalArgumentException e) {
-         return Map.of("error", "Unknown state: UNSUPPORTED_STATUS");
+    public Map<String, String> handle(final IllegalArgumentException e) {
+        return Map.of("error", "Unknown state: UNSUPPORTED_STATUS");
     }
 
 
