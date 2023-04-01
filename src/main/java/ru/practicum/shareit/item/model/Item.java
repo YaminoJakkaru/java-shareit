@@ -2,18 +2,10 @@ package ru.practicum.shareit.item.model;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 
 @Accessors(chain = true)
 @Entity

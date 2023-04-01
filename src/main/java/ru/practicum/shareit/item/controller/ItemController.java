@@ -42,13 +42,13 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems( @RequestParam String text) {
-        return itemService.searchItems( text);
+    public List<ItemDto> searchItems(@RequestParam String text) {
+        return itemService.searchItems(text);
     }
 
     @PostMapping("/{itemId}/comment")
-            public CommentDto CreateComment(@RequestHeader("X-Sharer-User-Id") @NotNull int userId,
-                                         @PathVariable @NotNull int itemId, @RequestBody @Valid CommentDto commentDto){
+            public CommentDto createComment(@RequestHeader("X-Sharer-User-Id") @NotNull int userId,
+                                         @PathVariable @NotNull int itemId, @RequestBody @Valid CommentDto commentDto) {
         return itemService.addComment(userId,itemId,commentDto);
     }
 }

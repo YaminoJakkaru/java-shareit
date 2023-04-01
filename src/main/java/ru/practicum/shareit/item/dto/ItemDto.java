@@ -40,11 +40,11 @@ public class ItemDto {
 
     private BookingDto nextBooking;
 
-    private final List<CommentDto> comments= new ArrayList<>();
+    private final List<CommentDto> comments = new ArrayList<>();
 
 
 
-    public  Item toItem(){
+    public  Item toItem() {
         return new Item()
                 .setId(this.getId())
                 .setName(this.getName())
@@ -52,10 +52,10 @@ public class ItemDto {
                 .setAvailable(this.getAvailable());
     }
 
-    public  void setNearBookings(List<Booking> bookings){
-       Booking bookingLast=bookings.stream().filter(booking -> booking.getStart().isBefore(LocalDateTime.now()))
+    public  void setNearBookings(List<Booking> bookings) {
+       Booking bookingLast = bookings.stream().filter(booking -> booking.getStart().isBefore(LocalDateTime.now()))
                .max(Comparator.comparing(Booking::getStart)).orElse(null);
-        Booking bookingNext=bookings.stream().filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
+        Booking bookingNext = bookings.stream().filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                .min(Comparator.comparing(Booking::getStart)).orElse(null);
         if (bookingLast != null) {
             this.lastBooking = bookingLast.toBookingDto();
@@ -65,7 +65,7 @@ public class ItemDto {
         }
     }
 
-    public void addComment(Comment comment){
+    public void addComment(Comment comment) {
         comments.add(comment.toCommentDto());
     }
 
