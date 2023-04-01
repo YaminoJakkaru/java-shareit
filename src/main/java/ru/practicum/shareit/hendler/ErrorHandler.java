@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.exception.BookingNotFoundException;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
-import ru.practicum.shareit.user.service.impl.exception.EmailException;
-import ru.practicum.shareit.user.service.impl.exception.UserNotFoundException;
+import ru.practicum.shareit.user.exception.EmailException;
+import ru.practicum.shareit.user.exception.UserNotFoundException;
 
 
 import javax.validation.ValidationException;

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import ru.practicum.shareit.user.model.User;
+
 import javax.validation.constraints.*;
 
 @Data
@@ -18,7 +19,7 @@ public class UserDto {
     @Email
     private String email;
 
-    public  User toUser() {
+    public User toUser() {
         return new User()
                 .setId(this.getId())
                 .setName(this.getName())

@@ -16,7 +16,7 @@ import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.user.service.impl.exception.UserNotFoundException;
+import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
@@ -34,6 +34,7 @@ public class ItemServiceImpl implements ItemService {
     public final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+
     @Autowired
     public ItemServiceImpl(UserRepository userRepository, ItemRepository itemRepository, BookingRepository bookingRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
@@ -73,7 +74,7 @@ public class ItemServiceImpl implements ItemService {
         if (newItem.getDescription() != null && !newItem.getDescription().equals(item.getDescription())) {
             item.setDescription(newItem.getDescription());
         }
-        if (newItem.getAvailable() != null ) {
+        if (newItem.getAvailable() != null) {
             item.setAvailable(newItem.getAvailable());
         }
         return itemRepository.save(item);
@@ -86,9 +87,9 @@ public class ItemServiceImpl implements ItemService {
             log.warn("Попытка получить данные несуществующего предмета");
             throw new ItemNotFoundException();
         }
-        ItemDto itemDto=item.toItemDto();
+        ItemDto itemDto = item.toItemDto();
         if (userId == itemDto.getOwner().getId()) {
-            itemDto.setNearBookings(bookingRepository.findBookingsByItemIdAndStatusIsNot(itemDto.getId(),Status.REJECTED));
+            itemDto.setNearBookings(bookingRepository.findBookingsByItemIdAndStatusIsNot(itemDto.getId(), Status.REJECTED));
         }
         commentRepository.findCommentsByItemId(itemId).forEach(itemDto::addComment);
         return itemDto;
@@ -97,47 +98,47 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getAllUserItems(int userId) {
         List<ItemDto> items = new ArrayList<>();
-        itemRepository.findItemsByOwnerIdOrderByIdAsc(userId).forEach(item->items.add(item.toItemDto()));
+        itemRepository.findItemsByOwnerIdOrderByIdAsc(userId).forEach(item -> items.add(item.toItemDto()));
         List<Booking> allBookings = bookingRepository.findBookingsByItemOwnerIdAndStatusIsNot(userId, Status.REJECTED);
         List<Comment> allComments = commentRepository.findCommentByItemOwnerId(userId);
-        for (ItemDto itemDto: items){
-            allComments.stream().filter(comment -> comment.getItem().getId()==itemDto.getId())
+        for (ItemDto itemDto : items) {
+            allComments.stream().filter(comment -> comment.getItem().getId() == itemDto.getId())
                     .forEach(itemDto::addComment);
-           itemDto.setNearBookings(allBookings.stream().filter(booking -> booking.getItem().getId()==itemDto.getId())
-                   .collect(Collectors.toList()));
+            itemDto.setNearBookings(allBookings.stream().filter(booking -> booking.getItem().getId() == itemDto.getId())
+                    .collect(Collectors.toList()));
         }
         return items;
     }
 
     @Override
-    public List<ItemDto> searchItems( String text) {
-        List<ItemDto> items= new ArrayList<>();
-        if (!text.isBlank()){
-            itemRepository.findItemByNameOrDescriptionContainsIgnoreCaseAndAvailableIsTrue(text,text)
-                    .forEach(item->items.add(item.toItemDto()));
+    public List<ItemDto> searchItems(String text) {
+        List<ItemDto> items = new ArrayList<>();
+        if (!text.isBlank()) {
+            itemRepository.findItemByNameOrDescriptionContainsIgnoreCaseAndAvailableIsTrue(text, text)
+                    .forEach(item -> items.add(item.toItemDto()));
         }
         return items;
     }
 
     @Override
     @Transactional
-    public CommentDto addComment(int userId, int itemId,  CommentDto commentDto) {
+    public CommentDto addComment(int userId, int itemId, CommentDto commentDto) {
         Item item = itemRepository.findItemById(itemId);
         if (item == null) {
             log.warn("Попытка оставить отзыв несуществующему предмету");
             throw new ValidationException();
         }
         User user = userRepository.findUserById(userId);
-        if (user == null ) {
+        if (user == null) {
             log.warn("Попытка оствить от имени несуществующего пользователя");
             throw new ValidationException();
         }
         Booking booking = bookingRepository.findFirstBookingsByBookerIdAndItemId(userId, itemId);
-        if(booking == null || booking.getStart().isAfter(LocalDateTime.now())){
+        if (booking == null || booking.getStart().isAfter(LocalDateTime.now())) {
             log.warn("Попытка  осавить отзыв без прав");
             throw new ValidationException();
         }
         Comment comment = commentDto.toComment().setItem(item).setAuthor(user).setCreated(LocalDateTime.now());
-       return commentRepository.save(comment).toCommentDto();
+        return commentRepository.save(comment).toCommentDto();
     }
 }

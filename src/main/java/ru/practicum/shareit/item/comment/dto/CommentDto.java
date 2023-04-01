@@ -25,7 +25,7 @@ public class CommentDto {
 
     private LocalDateTime created;
 
-    public Comment toComment (){
+    public Comment toComment() {
         return new Comment()
                 .setText(this.getText());
     }

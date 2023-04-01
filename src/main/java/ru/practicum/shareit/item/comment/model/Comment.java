@@ -32,7 +32,7 @@ public class Comment {
     @Column(name = "created_date")
     private LocalDateTime created;
 
-    public CommentDto toCommentDto(){
+    public CommentDto toCommentDto() {
         return new CommentDto()
                 .setId(this.getId())
                 .setText(this.getText())

@@ -12,21 +12,21 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 public class BookingDto {
-    int id;
+    private int id;
 
     @Future
     @NotNull
-    LocalDateTime start;
+    private LocalDateTime start;
 
     @Future
     @NotNull
-    LocalDateTime end;
+    private LocalDateTime end;
 
     @NotNull
-    int itemId;
-    String itemName;
-    int bookerId;
-    Status status;
+    private int itemId;
+    private String itemName;
+    private int bookerId;
+    private Status status;
 
     public Booking toBooking() {
         return new Booking()

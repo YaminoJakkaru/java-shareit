@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.service.impl.exception;
+package ru.practicum.shareit.user.exception;
 
 public class EmailException extends RuntimeException{
 

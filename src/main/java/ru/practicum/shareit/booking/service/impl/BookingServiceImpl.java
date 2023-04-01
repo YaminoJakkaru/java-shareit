@@ -15,7 +15,7 @@ import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.user.service.impl.exception.UserNotFoundException;
+import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
@@ -41,7 +41,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     @Override
     public Booking addBooking(int bookerId, BookingDto bookingDto) {
-        if (!bookingDto.getStart().isBefore(bookingDto.getEnd()) ){
+        if (!bookingDto.getStart().isBefore(bookingDto.getEnd())) {
             log.warn("Валидация не пройдена");
             throw new ValidationException();
         }
@@ -51,12 +51,12 @@ public class BookingServiceImpl implements BookingService {
             throw new ItemNotFoundException();
         }
         User booker = userRepository.findUserById(bookerId);
-        if (booker == null || bookerId == item.getOwner().getId() ) {
+        if (booker == null || bookerId == item.getOwner().getId()) {
             log.warn("попутка забронировать ридмет с неправелоного аккаута");
             throw new UserNotFoundException();
         }
 
-        if(!item.getAvailable()){
+        if (!item.getAvailable()) {
             log.warn("Валидация не пройдена");
             throw new ValidationException();
         }
@@ -72,7 +72,7 @@ public class BookingServiceImpl implements BookingService {
             log.warn("Попытка получить несучествующую бронь");
             throw new BookingNotFoundException();
         }
-        if(approved && booking.getStatus().equals(Status.APPROVED)){
+        if (approved && booking.getStatus().equals(Status.APPROVED)) {
             log.warn("Попытка повторно подтведить бронирование");
             throw new ValidationException();
         }
@@ -85,13 +85,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking findBookingById(int bookerId,int bookingId) {
+    public Booking findBookingById(int bookerId, int bookingId) {
         Booking booking = bookingRepository.findBookingById(bookingId);
-        if (booking == null){
+        if (booking == null) {
             log.warn("Попытка получить данные несуществующего бронирования");
             throw new BookingNotFoundException();
         }
-        if(booking.getBooker().getId() != bookerId && booking.getItem().getOwner().getId() != bookerId){
+        if (booking.getBooker().getId() != bookerId && booking.getItem().getOwner().getId() != bookerId) {
             log.warn("Попытка получить данные бронирования не обладая правами");
             throw new UserNotFoundException();
         }
@@ -105,23 +105,23 @@ public class BookingServiceImpl implements BookingService {
             log.warn("Попытка получить несучествующий аккаунт");
             throw new UserNotFoundException();
         }
-        switch (State.valueOf(state)){
+        switch (State.valueOf(state)) {
             case ALL:
-               return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookerId);
+                return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookerId);
             case CURRENT:
-                return  bookingRepository.
-                        findBookingsByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdDesc(bookerId,
-                        LocalDateTime.now(),LocalDateTime.now());
+                return bookingRepository.
+                        findBookingsByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(bookerId,
+                                LocalDateTime.now(), LocalDateTime.now());
             case PAST:
                 return bookingRepository.
-                        findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(bookerId,LocalDateTime.now());
+                        findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(bookerId, LocalDateTime.now());
             case FUTURE:
                 return bookingRepository.
-                        findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(bookerId,LocalDateTime.now());
+                        findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(bookerId, LocalDateTime.now());
             case WAITING:
-                return  bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId,Status.WAITING);
+                return bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId, Status.WAITING);
             case REJECTED:
-                return bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId,Status.REJECTED);
+                return bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId, Status.REJECTED);
             default:
                 return null;
         }
@@ -134,13 +134,13 @@ public class BookingServiceImpl implements BookingService {
             log.warn("Попытка получить несучествующий аккаунт");
             throw new UserNotFoundException();
         }
-        switch (State.valueOf(state)){
+        switch (State.valueOf(state)) {
             case ALL:
                 return bookingRepository.findBookingsByItemOwnerIdOrderByIdDesc(ownerId);
             case CURRENT:
-                return  bookingRepository.
-                        findBookingsByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByIdDesc(ownerId,
-                        LocalDateTime.now(),LocalDateTime.now());
+                return bookingRepository.
+                        findBookingsByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(ownerId,
+                                LocalDateTime.now(), LocalDateTime.now());
             case PAST:
                 return bookingRepository.findBookingsByItemOwnerIdAndEndIsBeforeOrderByIdDesc(ownerId,
                         LocalDateTime.now());
@@ -148,9 +148,9 @@ public class BookingServiceImpl implements BookingService {
                 return bookingRepository.findBookingsByItemOwnerIdAndStartIsAfterOrderByIdDesc(ownerId,
                         LocalDateTime.now());
             case WAITING:
-                return  bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId,Status.WAITING);
+                return bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId, Status.WAITING);
             case REJECTED:
-                return bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId,Status.REJECTED);
+                return bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId, Status.REJECTED);
             default:
                 return null;
         }

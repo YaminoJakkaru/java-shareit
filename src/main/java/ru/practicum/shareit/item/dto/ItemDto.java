@@ -1,5 +1,4 @@
 package ru.practicum.shareit.item.dto;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -9,15 +8,12 @@ import ru.practicum.shareit.item.comment.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
-
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Accessors(chain = true)
 @Data
