@@ -1,38 +1,41 @@
 package ru.practicum.shareit.user.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.service.impl.exception.EmailException;
+import ru.practicum.shareit.user.service.impl.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
-import ru.practicum.shareit.user.storage.UserStorage;
+
 import javax.validation.ValidationException;
 import java.util.List;
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
-    private final UserStorage userStorage;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserStorage userStorage) {
-        this.userStorage = userStorage;
+    public UserServiceImpl(@Lazy UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
 
     @Override
+    @Transactional
     public User addUser(User user) {
-        if (userStorage.findUserByEmail(user.getEmail()).isPresent()) {
-            log.warn("Попытка создать аккаунт с уже сществующей почтой");
-            throw new ValidationException();
-        }
-        return userStorage.addUser(user);
+        return userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public User updateUser(int useId, User newUser) {
-        User user = userStorage.findUserById(useId);
+        User user = userRepository.findUserById(useId);
         if (user == null) {
             log.warn("Попытка изменить несуществующий аккаунт:" + useId);
             throw new UserNotFoundException();
@@ -41,24 +44,24 @@ public class UserServiceImpl implements UserService {
             user.setName(newUser.getName());
         }
         if (newUser.getEmail() != null && !newUser.getEmail().equals(user.getEmail())) {
-            if (userStorage.findUserByEmail(newUser.getEmail()).isPresent()) {
+            if (userRepository.findUserByEmail(newUser.getEmail()).isPresent()) {
                 log.warn("Попытка привязать аккаунт к чужой почте");
-                throw new ValidationException();
+                throw new EmailException();
             }
             user.setEmail(newUser.getEmail());
         }
-        return userStorage.updateUser(user);
+        return userRepository.save(user);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userStorage.getAllUsers();
+        return userRepository.findAll();
     }
 
     @Override
     public User findUserById(int useId) {
 
-        User user = userStorage.findUserById(useId);
+        User user = userRepository.findUserById(useId);
         if (user == null) {
             log.warn("Попытка получить несучествующий аккаунт:" + useId);
             throw new UserNotFoundException();
@@ -67,8 +70,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(int userId) {
         log.info("Удален аккаунт " + userId);
-        userStorage.deleteUser(userId);
+        userRepository.removeUserById(userId);
     }
 }

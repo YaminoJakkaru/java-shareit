@@ -1,25 +1,34 @@
 package ru.practicum.shareit.user.model;
-import lombok.Builder;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+
+import lombok.experimental.Accessors;
 import ru.practicum.shareit.user.dto.UserDto;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 
+
 @Data
-@Builder
+@Accessors(chain = true)
+@Entity
+@Table(name = "users")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
 
     @Email
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
-
     public  UserDto toUserDto() {
-        return UserDto.builder()
-                .id(this.getId())
-                .name(this.getName())
-                .email(this.getEmail())
-                .build();
+        return  new UserDto()
+                .setId(this.getId())
+                .setName(this.getName())
+                .setEmail(this.getEmail());
     }
 
 }
