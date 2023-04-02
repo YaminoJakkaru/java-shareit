@@ -8,6 +8,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,21 +21,22 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime start;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime end;
 
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
     @ManyToOne
-    @JoinColumn(name = "booker_id")
+    @JoinColumn(name = "booker_id", nullable = false)
     private User booker;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     public BookingDto toBookingDto() {

@@ -22,6 +22,7 @@ import ru.practicum.shareit.user.model.User;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
 
     private final UserRepository userRepository;
-    public final ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
 
@@ -97,17 +98,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAllUserItems(int userId) {
-        List<ItemDto> items = new ArrayList<>();
-        itemRepository.findItemsByOwnerIdOrderByIdAsc(userId).forEach(item -> items.add(item.toItemDto()));
+        HashMap<Integer, ItemDto> items = new HashMap<>();
+        itemRepository.findItemsByOwnerIdOrderByIdAsc(userId).forEach(item -> items.put(item.getId(),item.toItemDto()));
         List<Booking> allBookings = bookingRepository.findBookingsByItemOwnerIdAndStatusIsNot(userId, Status.REJECTED);
         List<Comment> allComments = commentRepository.findCommentByItemOwnerId(userId);
-        for (ItemDto itemDto : items) {
-            allComments.stream().filter(comment -> comment.getItem().getId() == itemDto.getId())
-                    .forEach(itemDto::addComment);
-            itemDto.setNearBookings(allBookings.stream().filter(booking -> booking.getItem().getId() == itemDto.getId())
-                    .collect(Collectors.toList()));
-        }
-        return items;
+
+            allComments.forEach(comment -> items.get(comment.getItem().getId()).addComment(comment));
+            items.values().forEach(itemDto -> itemDto.setNearBookings(allBookings));
+        return new ArrayList<>(items.values());
     }
 
     @Override

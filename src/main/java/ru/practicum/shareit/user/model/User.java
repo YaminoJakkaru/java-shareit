@@ -16,10 +16,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "user_name", nullable = false, length = 252)
     private String name;
 
     @Email
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 320)
     private String email;
 
     public UserDto toUserDto() {
