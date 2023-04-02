@@ -18,13 +18,11 @@ import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
-
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
