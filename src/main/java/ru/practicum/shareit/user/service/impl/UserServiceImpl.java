@@ -9,7 +9,6 @@ import ru.practicum.shareit.user.exception.EmailException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
-
 import java.util.List;
 
 @Service
