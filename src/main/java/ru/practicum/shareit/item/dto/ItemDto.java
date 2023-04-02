@@ -53,7 +53,6 @@ public class ItemDto {
     }
 
     public  void setNearBookings(List<Booking> bookings) {
-        bookings.removeIf(booking -> booking.getItem().getId() != this.getId());
        Booking bookingLast = bookings.stream().filter(booking -> booking.getStart().isBefore(LocalDateTime.now()))
                .max(Comparator.comparing(Booking::getStart)).orElse(null);
         Booking bookingNext = bookings.stream().filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))

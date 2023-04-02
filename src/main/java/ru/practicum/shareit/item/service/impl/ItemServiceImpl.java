@@ -102,7 +102,22 @@ public class ItemServiceImpl implements ItemService {
         List<Comment> allComments = commentRepository.findCommentByItemOwnerId(userId);
 
             allComments.forEach(comment -> items.get(comment.getItem().getId()).addComment(comment));
-            items.values().forEach(itemDto -> itemDto.setNearBookings(allBookings));
+            for (Booking booking : allBookings){
+                if (booking.getStart().isBefore(LocalDateTime.now())){
+                    if (items.get(booking.getItem().getId()).getLastBooking() == null
+                            || items.get(booking.getItem().getId()).getLastBooking().getStart()
+                            .isBefore(booking.getStart())){
+                        items.get(booking.getItem().getId()).setLastBooking(booking.toBookingDto());
+                    }
+                }
+                if (booking.getStart().isAfter(LocalDateTime.now())){
+                    if (items.get(booking.getItem().getId()).getNextBooking() == null
+                            || items.get(booking.getItem().getId()).getNextBooking().getStart()
+                            .isAfter(booking.getStart())){
+                        items.get(booking.getItem().getId()).setNextBooking(booking.toBookingDto());
+                    }
+                }
+            }
         return new ArrayList<>(items.values());
     }
 
