@@ -102,7 +102,7 @@ public class ItemServiceImpl implements ItemService {
         List<Comment> allComments = commentRepository.findCommentByItemOwnerId(userId);
 
             allComments.forEach(comment -> items.get(comment.getItem().getId()).addComment(comment));
-            for (Booking booking : allBookings){
+            for (Booking booking : allBookings) {
                 if (booking.getStart().isBefore(LocalDateTime.now())) {
                     if (items.get(booking.getItem().getId()).getLastBooking() == null
                             || items.get(booking.getItem().getId()).getLastBooking().getStart()
