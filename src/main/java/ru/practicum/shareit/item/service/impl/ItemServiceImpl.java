@@ -18,11 +18,13 @@ import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
+
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -96,39 +98,37 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAllUserItems(int userId) {
-        HashMap<Integer, ItemDto> items = new HashMap<>();
-        itemRepository.findItemsByOwnerIdOrderByIdAsc(userId).forEach(item -> items.put(item.getId(),item.toItemDto()));
+        Map<Integer, ItemDto> items = itemRepository.findItemsByOwnerIdOrderByIdAsc(userId)
+                .stream()
+                .collect(Collectors.toMap(Item::getId, Item::toItemDto));
         List<Booking> allBookings = bookingRepository.findBookingsByItemOwnerIdAndStatusIsNot(userId, Status.REJECTED);
         List<Comment> allComments = commentRepository.findCommentByItemOwnerId(userId);
 
-            allComments.forEach(comment -> items.get(comment.getItem().getId()).addComment(comment));
-            for (Booking booking : allBookings) {
-                if (booking.getStart().isBefore(LocalDateTime.now())) {
-                    if (items.get(booking.getItem().getId()).getLastBooking() == null
-                            || items.get(booking.getItem().getId()).getLastBooking().getStart()
-                            .isBefore(booking.getStart())) {
-                        items.get(booking.getItem().getId()).setLastBooking(booking.toBookingDto());
-                    }
-                }
-                if (booking.getStart().isAfter(LocalDateTime.now())) {
-                    if (items.get(booking.getItem().getId()).getNextBooking() == null
-                            || items.get(booking.getItem().getId()).getNextBooking().getStart()
-                            .isAfter(booking.getStart())) {
-                        items.get(booking.getItem().getId()).setNextBooking(booking.toBookingDto());
-                    }
-                }
+        allComments.forEach(comment -> items.get(comment.getItem().getId()).addComment(comment));
+        for (Booking booking : allBookings) {
+            if (booking.getStart().isBefore(LocalDateTime.now())
+                    && (items.get(booking.getItem().getId()).getLastBooking() == null
+                    || items.get(booking.getItem().getId()).getLastBooking().getStart()
+                    .isBefore(booking.getStart()))) {
+                items.get(booking.getItem().getId()).setLastBooking(booking.toBookingDto());
             }
+            if (booking.getStart().isAfter(LocalDateTime.now())
+                    && (items.get(booking.getItem().getId()).getNextBooking() == null
+                    || items.get(booking.getItem().getId()).getNextBooking().getStart()
+                    .isAfter(booking.getStart()))) {
+                items.get(booking.getItem().getId()).setNextBooking(booking.toBookingDto());
+            }
+        }
         return new ArrayList<>(items.values());
     }
 
     @Override
     public List<ItemDto> searchItems(String text) {
-        List<ItemDto> items = new ArrayList<>();
-        if (!text.isBlank()) {
-            itemRepository.findItemByNameOrDescriptionContainsIgnoreCaseAndAvailableIsTrue(text, text)
-                    .forEach(item -> items.add(item.toItemDto()));
-        }
-        return items;
+        return text.isBlank() ? List.of() : itemRepository
+                .findItemByNameOrDescriptionContainsIgnoreCaseAndAvailableIsTrue(text, text)
+                .stream()
+                .map(Item::toItemDto)
+                .collect(Collectors.toList());
     }
 
     @Override
