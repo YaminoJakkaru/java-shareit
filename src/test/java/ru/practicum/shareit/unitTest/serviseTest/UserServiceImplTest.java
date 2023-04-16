@@ -32,7 +32,7 @@ public class UserServiceImplTest {
         int userId = 0;
         User user = new User();
         when(userRepository.findUserById(userId)).thenReturn(null);
-        Assertions.assertThrows( UserNotFoundException.class, () -> userServiceImpl.updateUser(userId, user));
+        Assertions.assertThrows(UserNotFoundException.class, () -> userServiceImpl.updateUser(userId, user));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class UserServiceImplTest {
         User user = new User().setEmail("e@ma.il");
         when(userRepository.findUserById(userId)).thenReturn(new User().setEmail("other.e@ma.il"));
         when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.of(new User()));
-        Assertions.assertThrows( EmailException.class, () -> userServiceImpl.updateUser(userId, user));
+        Assertions.assertThrows(EmailException.class, () -> userServiceImpl.updateUser(userId, user));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class UserServiceImplTest {
     void getUserByIdTest_whetUserNotFound() {
         int userId = 0;
         when(userRepository.findUserById(userId)).thenReturn(null);
-        Assertions.assertThrows( UserNotFoundException.class, () -> userServiceImpl.findUserById(userId));
+        Assertions.assertThrows(UserNotFoundException.class, () -> userServiceImpl.findUserById(userId));
     }
 
     @Test

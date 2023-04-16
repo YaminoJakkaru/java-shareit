@@ -26,7 +26,7 @@ public class ItemRequest {
     @Column(name = "created_date")
     private LocalDateTime created;
 
-    public ItemRequestDto toItemRequestDto(){
+    public ItemRequestDto toItemRequestDto() {
         return new ItemRequestDto()
                 .setId(this.getId())
                 .setDescription(this.getDescription())

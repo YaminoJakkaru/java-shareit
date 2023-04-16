@@ -307,7 +307,7 @@ public class ItemServiceImplTest {
                 .thenReturn(List.of());
         when(commentRepository.findCommentByItemOwnerId(userSecond.getId())).thenReturn(List.of());
         Assertions.assertEquals(itemService.getAllUserItems(userSecond.getId(), 1, 1),
-                List.of( itemThirdDto));
+                List.of(itemThirdDto));
     }
 
     @Test

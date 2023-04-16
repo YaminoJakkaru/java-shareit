@@ -19,11 +19,8 @@ import ru.practicum.shareit.request.service.impl.ItemRequestServiceImpl;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -96,8 +93,8 @@ public class ItemRequestServiceImplTest {
                 .thenReturn(List.of(itemFirst));
         ItemRequestDto itemRequestDto = itemRequestFirst.toItemRequestDto();
         itemRequestDto.addItem(itemFirst);
-        Assertions.assertEquals(itemRequestService.
-                findAllByRequestorId(userFirst.getId()),List.of(itemRequestDto));
+        Assertions.assertEquals(itemRequestService
+                .findAllByRequestorId(userFirst.getId()),List.of(itemRequestDto));
     }
 
     @Test
@@ -109,8 +106,8 @@ public class ItemRequestServiceImplTest {
                 .thenReturn(List.of(itemFirst));
         ItemRequestDto itemRequestDto = itemRequestFirst.toItemRequestDto();
         itemRequestDto.addItem(itemFirst);
-        Assertions.assertEquals(itemRequestService.
-                findAll(userFirst.getId(), 0, 10),List.of(itemRequestDto));
+        Assertions.assertEquals(itemRequestService
+                .findAll(userFirst.getId(), 0, 10),List.of(itemRequestDto));
     }
 
     @Test
@@ -119,6 +116,7 @@ public class ItemRequestServiceImplTest {
         Assertions.assertThrows(UserNotFoundException.class,
                 () -> itemRequestService.findById(basicId, basicId));
     }
+
     @Test
     void findByIdTest_whenItemRequestIsNull() {
         when(userRepository.findUserById(basicId)).thenReturn(new User());
@@ -134,8 +132,7 @@ public class ItemRequestServiceImplTest {
         when(itemRepository.findItemsByRequestIdOrderByIdAsc(userFirst.getId())).thenReturn(List.of(itemFirst));
         ItemRequestDto itemRequestDto = itemRequestFirst.toItemRequestDto();
         itemRequestDto.addItem(itemFirst);
-        Assertions.assertEquals(itemRequestService.
-                findById(userFirst.getId(),itemRequestFirst.getId()), itemRequestDto);
+        Assertions.assertEquals(itemRequestService
+                .findById(userFirst.getId(),itemRequestFirst.getId()), itemRequestDto);
     }
-
 }

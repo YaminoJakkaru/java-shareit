@@ -41,7 +41,7 @@ public class ItemController {
     public List<ItemDto> getAllUserItems(@RequestHeader("X-Sharer-User-Id") @NotNull int userId,
                                          @RequestParam(defaultValue = "0")  int from,
                                          @RequestParam(defaultValue = "20")  int size) {
-        if(from < 0 || size < 0){
+        if (from < 0 || size < 0) {
             throw  new ValidationException();
         }
         return itemService.getAllUserItems(userId, from, size);
@@ -51,7 +51,7 @@ public class ItemController {
     public List<ItemDto> searchItems(@RequestParam String text,
                                      @RequestParam(defaultValue = "0")  int from,
                                      @RequestParam(defaultValue = "20")  int size) {
-        if(from < 0 || size < 0){
+        if (from < 0 || size < 0) {
             throw  new ValidationException();
         }
         return itemService.searchItems(text, from, size);

@@ -122,7 +122,7 @@ public class ItemControllerTest {
         verify(itemService, never()).addItem(userId, itemFirst.toItemDto());
 
 
-        String res= mockMvc.perform(post("/items")
+        String res = mockMvc.perform(post("/items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userId)
                         .content(objectMapper.writeValueAsString(itemFirst.toItemDto())))
@@ -166,7 +166,7 @@ public class ItemControllerTest {
         verify(itemService, never()).findItemById(userId,itemId);
 
         when(itemService.findItemById(userId,itemId)).thenReturn(itemFirst.toItemDto());
-        String res =mockMvc.perform(get("/items/{itemId}",itemId)
+        String res = mockMvc.perform(get("/items/{itemId}",itemId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userId))
                 .andExpect(status().isOk())
@@ -271,7 +271,7 @@ public class ItemControllerTest {
         verify(itemService, never()).addComment(userId, itemId, commentFirst);
 
 
-        String res= mockMvc.perform(post("/items/{itemId}/comment", itemId)
+        String res = mockMvc.perform(post("/items/{itemId}/comment", itemId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userId)
                         .content(objectMapper.writeValueAsString(commentFirst)))

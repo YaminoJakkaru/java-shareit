@@ -1,7 +1,5 @@
 package ru.practicum.shareit.hendler;
 
-
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.exception.BookingNotFoundException;

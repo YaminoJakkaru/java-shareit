@@ -44,7 +44,7 @@ public class BookingController {
                                              @RequestParam(defaultValue = "ALL") String state,
                                              @RequestParam(defaultValue = "0")  int from,
                                              @RequestParam(defaultValue = "20")  int size) {
-        if(from < 0 || size < 0){
+        if (from < 0 || size < 0) {
             throw  new ValidationException();
         }
         return bookingService.getBookingsByUserId(userId, state, from, size);
@@ -55,7 +55,7 @@ public class BookingController {
                                        @RequestParam(defaultValue = "ALL") String state,
                                        @RequestParam(defaultValue = "0")  int from,
                                        @RequestParam(defaultValue = "20")  int size) {
-        if(from < 0 || size < 0){
+        if (from < 0 || size < 0) {
             throw  new ValidationException();
         }
         return bookingService.getBookingsByItemsOwnerId(userId, state, from, size);

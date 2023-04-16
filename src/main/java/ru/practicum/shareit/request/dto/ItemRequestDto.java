@@ -26,7 +26,7 @@ public class ItemRequestDto {
         return new ItemRequest().setDescription(this.getDescription());
     }
 
-    public void addItem(Item item){
+    public void addItem(Item item) {
         items.add(item.toItemDto());
     }
 }

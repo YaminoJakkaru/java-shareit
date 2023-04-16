@@ -11,6 +11,7 @@ public class UserTest {
                 .setId(1)
                 .setName("this.getName")
                 .setEmail("this.get@Email.ru");
+
     @Test
     void toUserDtoTest() {
         Assertions.assertEquals(user.toUserDto(), new UserDto()

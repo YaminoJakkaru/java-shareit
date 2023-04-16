@@ -58,7 +58,7 @@ public class ItemServiceImpl implements ItemService {
             throw new UserNotFoundException();
         }
         Item item = itemDto.toItem();
-        if (itemDto.getRequestId() != null){
+        if (itemDto.getRequestId() != null) {
             item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()));
         }
         item.setOwner(user);
@@ -93,7 +93,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto findItemById(int userId, int itemId) {
         User user = userRepository.findUserById(userId);
-        if (user == null ) {
+        if (user == null) {
             log.warn("Попытка получить данные придмета без прав доступа");
             throw new UserNotFoundException();
         }
@@ -114,7 +114,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getAllUserItems(int userId, int from, int size) {
 
         User user = userRepository.findUserById(userId);
-        if (user == null ) {
+        if (user == null) {
             log.warn("Попытка получить данные придметов без прав доступа");
             throw new UserNotFoundException();
         }

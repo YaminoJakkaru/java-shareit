@@ -110,12 +110,13 @@ public class BookingServiceImplTest {
         Assertions.assertThrows(ValidationException.class, () -> bookingService.addBooking(userFirst.getId(),
                 bookingFirst.toBookingDto()));
     }
+
     @Test
     void addBookingTest_whenAllRight() {
         when(itemRepository.findItemById(anyInt())).thenReturn(itemSecond);
         when(userRepository.findUserById(anyInt())).thenReturn(userFirst);
         when(bookingRepository.save(any())).thenReturn(bookingFirst);
-        Assertions.assertEquals( bookingService.addBooking(userFirst.getId(),
+        Assertions.assertEquals(bookingService.addBooking(userFirst.getId(),
                 bookingFirst.toBookingDto()), bookingFirst);
         verify(bookingRepository).save(any());
     }
@@ -144,7 +145,7 @@ public class BookingServiceImplTest {
     @Test
     void updateStatusTest_whenAllRight() {
         when(bookingRepository.findBookingById(anyInt())).thenReturn(bookingFirst);
-        when( bookingRepository.save(any())).thenReturn(bookingFirst);
+        when(bookingRepository.save(any())).thenReturn(bookingFirst);
         Assertions.assertEquals(bookingService
                         .updateStatus(userSecond.getId(),bookingFirst.getId(),true), bookingFirst);
     }
@@ -176,7 +177,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    void getBookingsByUserIdTest_WhenUserIsNull () {
+    void getBookingsByUserIdTest_WhenUserIsNull() {
         when(userRepository.findUserById(userBasicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class,
                 () -> bookingService.getBookingsByUserId(userBasicId, "ALL", 0, 1));
@@ -186,7 +187,7 @@ public class BookingServiceImplTest {
     void getBookingsByUserIdTest_ALL() {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
         when(bookingRepository.findBookingsByBookerIdOrderByIdDesc(userFirst.getId(),
-                PageRequest.of( 0, 10))).thenReturn(new PageImpl<>(List.of()));
+                PageRequest.of(0, 10))).thenReturn(new PageImpl<>(List.of()));
         Assertions.assertEquals(bookingService.getBookingsByUserId(userFirst.getId(), "ALL", 0, 10),
                 List.of());
     }
@@ -194,10 +195,9 @@ public class BookingServiceImplTest {
     @Test
     void getBookingsByUserIdTest_PAST() {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
-
         when(bookingRepository
                 .findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(eq(userFirst.getId()),
-                        any(), eq(PageRequest.of( 0, 10))))
+                        any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByUserId(userFirst.getId(), "PAST", 0, 10),
                 List.of(bookingFirst));
@@ -209,7 +209,7 @@ public class BookingServiceImplTest {
 
         when(bookingRepository
                 .findBookingsByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(eq(userFirst.getId()),
-                        any(), any(), eq(PageRequest.of( 0, 10))))
+                        any(), any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByUserId(userFirst.getId(), "CURRENT", 0, 10),
                 List.of(bookingFirst));
@@ -220,7 +220,7 @@ public class BookingServiceImplTest {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
         when(bookingRepository
                 .findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(eq(userFirst.getId()),
-                        any(), eq(PageRequest.of( 0, 10))))
+                        any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByUserId(userFirst.getId(), "FUTURE", 0, 10),
                 List.of(bookingFirst));
@@ -231,7 +231,7 @@ public class BookingServiceImplTest {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
         when(bookingRepository
                 .findBookingsByBookerIdAndStatusIsOrderByIdDesc(eq(userFirst.getId()),
-                        any(), eq(PageRequest.of( 0, 10))))
+                        any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByUserId(userFirst.getId(), "WAITING", 0, 10),
                 List.of(bookingFirst));
@@ -242,14 +242,14 @@ public class BookingServiceImplTest {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
         when(bookingRepository
                 .findBookingsByBookerIdAndStatusIsOrderByIdDesc(eq(userFirst.getId()),
-                        any(), eq(PageRequest.of( 0, 10))))
+                        any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByUserId(userFirst.getId(), "REJECTED", 0, 10),
                 List.of(bookingFirst));
     }
 
     @Test
-    void getBookingsByItemsOwnerIdTest_WhenUserIsNull () {
+    void getBookingsByItemsOwnerIdTest_WhenUserIsNull() {
         when(userRepository.findUserById(userBasicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class,
                 () -> bookingService.getBookingsByItemsOwnerId(userBasicId, "ALL", 0, 1));
@@ -259,7 +259,7 @@ public class BookingServiceImplTest {
     void getBookingsByItemsOwnerIdTest_ALL() {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
         when(bookingRepository.findBookingsByItemOwnerIdOrderByIdDesc(userFirst.getId(),
-                PageRequest.of( 0, 10))).thenReturn(new PageImpl<>(List.of()));
+                PageRequest.of(0, 10))).thenReturn(new PageImpl<>(List.of()));
         Assertions.assertEquals(bookingService.getBookingsByItemsOwnerId(userFirst.getId(), "ALL", 0, 10),
                 List.of());
     }
@@ -270,7 +270,7 @@ public class BookingServiceImplTest {
 
         when(bookingRepository
                 .findBookingsByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(eq(userFirst.getId()),
-                        any(), any(), eq(PageRequest.of( 0, 10))))
+                        any(), any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByItemsOwnerId(userFirst.getId(), "CURRENT", 0, 10),
                 List.of(bookingFirst));
@@ -279,10 +279,9 @@ public class BookingServiceImplTest {
     @Test
     void getBookingsByItemsOwnerIdTest_PAST() {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
-
         when(bookingRepository
                 .findBookingsByItemOwnerIdAndEndIsBeforeOrderByIdDesc(eq(userFirst.getId()),
-                        any(), eq(PageRequest.of( 0, 10))))
+                        any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByItemsOwnerId(userFirst.getId(), "PAST", 0, 10),
                 List.of(bookingFirst));
@@ -293,7 +292,7 @@ public class BookingServiceImplTest {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
         when(bookingRepository
                 .findBookingsByItemOwnerIdAndStartIsAfterOrderByIdDesc(eq(userFirst.getId()),
-                        any(), eq(PageRequest.of( 0, 10))))
+                        any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByItemsOwnerId(userFirst.getId(), "FUTURE", 0, 10),
                 List.of(bookingFirst));
@@ -304,7 +303,7 @@ public class BookingServiceImplTest {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
         when(bookingRepository
                 .findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(eq(userFirst.getId()),
-                        any(), eq(PageRequest.of( 0, 10))))
+                        any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByItemsOwnerId(userFirst.getId(), "WAITING", 0, 10),
                 List.of(bookingFirst));
@@ -315,7 +314,7 @@ public class BookingServiceImplTest {
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
         when(bookingRepository
                 .findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(eq(userFirst.getId()),
-                        any(), eq(PageRequest.of( 0, 10))))
+                        any(), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(bookingFirst)));
         Assertions.assertEquals(bookingService.getBookingsByItemsOwnerId(userFirst.getId(), "REJECTED", 0, 10),
                 List.of(bookingFirst));

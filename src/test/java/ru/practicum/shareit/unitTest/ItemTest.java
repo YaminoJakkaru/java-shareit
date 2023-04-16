@@ -20,7 +20,7 @@ public class ItemTest {
                 .setName("this.getName")
                 .setEmail("this.get@Email.ru");
 
-       ItemRequest itemRequest= new ItemRequest()
+       ItemRequest itemRequest = new ItemRequest()
                 .setId(1)
                 .setDescription("this.getDescription")
                 .setRequestor(user)
@@ -92,7 +92,7 @@ public class ItemTest {
 
     @Test
     void  setNearBookingsTest() {
-        ItemDto itemDto =item.toItemDto();
+        ItemDto itemDto = item.toItemDto();
         itemDto.setNearBookings(bookings);
         Assertions.assertEquals(itemDto.getLastBooking(), bookingSecond.toBookingDto());
         Assertions.assertEquals(itemDto.getNextBooking(), bookingThird.toBookingDto());

@@ -86,7 +86,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             throw new UserNotFoundException();
         }
        ItemRequest request = itemRequestRepository.findById(id);
-       if (request == null){
+       if (request == null) {
            log.warn("Запрошены данные несуществующего запроса");
            throw new ItemRequestNotFoundException();
        }

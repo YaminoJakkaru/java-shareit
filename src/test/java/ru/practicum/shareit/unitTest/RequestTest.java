@@ -15,14 +15,14 @@ public class RequestTest {
             .setName("this.getName")
             .setEmail("this.get@Email.ru");
 
-    ItemRequest itemRequest= new ItemRequest()
+    ItemRequest itemRequest = new ItemRequest()
                 .setId(1)
                 .setDescription("this.getDescription")
                 .setRequestor(user)
                 .setCreated(LocalDateTime.parse("2019-01-21T05:47:08.644"));
 
     @Test
-    void toItemRequestDtoTest(){
+    void toItemRequestDtoTest() {
         Assertions.assertEquals(itemRequest.toItemRequestDto(), new ItemRequestDto()
                 .setId(1)
                 .setDescription("this.getDescription")
