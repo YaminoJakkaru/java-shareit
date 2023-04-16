@@ -74,7 +74,7 @@ public class ItemRequestServiceImplTest {
         when(itemRequestRepository.save(any())).thenReturn(itemRequestFirst);
         Assertions.assertEquals(itemRequestService.addRequest(basicId, itemRequestFirst.toItemRequestDto()),
                 itemRequestFirst.toItemRequestDto());
-        verify(itemRequestService).addRequest(basicId, itemRequestFirst.toItemRequestDto());
+        verify(itemRequestRepository).save(any());
     }
 
     @Test
