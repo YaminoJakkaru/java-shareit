@@ -34,7 +34,7 @@ public class ItemDto {
     private User owner;
 
 
-    private ItemRequest request;
+    private Integer requestId;
 
     private BookingDto lastBooking;
 
