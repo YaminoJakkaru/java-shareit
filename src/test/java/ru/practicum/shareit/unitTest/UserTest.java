@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
-public class UserTest {
+ class UserTest {
 
     User user =  new User()
                 .setId(1)

@@ -43,17 +43,14 @@ public class ItemRequestControllerTest {
     @InjectMocks
     private ItemController itemController;
 
-    int userId = 0;
-    int requestId = 0;
-    int from = 0;
-    int size = 20;
-    String wrongValue = "-1";
-    String rightValue = "1";
-    ItemRequestDto itemRequestDto = new ItemRequestDto().setDescription("text");
+
 
     @SneakyThrows
     @Test
     void createTest() {
+
+        int userId = 0;
+        ItemRequestDto itemRequestDto = new ItemRequestDto().setDescription("text");
 
         when(itemRequestService.addRequest(userId, itemRequestDto))
                 .thenReturn(itemRequestDto);
@@ -81,6 +78,9 @@ public class ItemRequestControllerTest {
     @SneakyThrows
     @Test
     void getAllUserRequestsTest() {
+        int userId = 0;
+
+        ItemRequestDto itemRequestDto = new ItemRequestDto().setDescription("text");
         mockMvc.perform(get("/requests")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -97,6 +97,13 @@ public class ItemRequestControllerTest {
     @SneakyThrows
     @Test
     void getAllTest() {
+        int userId = 0;
+
+        int from = 0;
+        int size = 20;
+        String wrongValue = "-1";
+        String rightValue = "1";
+
         mockMvc.perform(get("/requests/all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -133,6 +140,10 @@ public class ItemRequestControllerTest {
     @SneakyThrows
     @Test
     void findRequestByIdTest() {
+        int userId = 0;
+        int requestId = 0;
+
+        ItemRequestDto itemRequestDto = new ItemRequestDto().setDescription("text");
         mockMvc.perform(get("/requests/{requestId}", requestId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());

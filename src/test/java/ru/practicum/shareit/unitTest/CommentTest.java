@@ -9,7 +9,7 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-public class CommentTest {
+ class CommentTest {
 
     User user =  new User()
                 .setId(1)

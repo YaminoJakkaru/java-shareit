@@ -34,7 +34,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ItemServiceImplTest {
+ class ItemServiceImplTest {
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -47,8 +47,7 @@ public class ItemServiceImplTest {
     CommentRepository commentRepository;
     @InjectMocks
     ItemServiceImpl itemService;
-    int userBasicId = 0;
-    int itemBasicId = 0;
+
     User userFirst = new User()
             .setId(1)
             .setName("this.getName")
@@ -145,13 +144,14 @@ public class ItemServiceImplTest {
 
     @Test
     void addItem_whenUserIsNull() {
-
+        int userBasicId = 0;
         when(userRepository.findUserById(userBasicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class, () -> itemService.addItem(userBasicId, new ItemDto()));
     }
 
     @Test
     void addItem_whenItemRequestIsNull() {
+        int userBasicId = 0;
 
         Item itemToSave = new Item();
         when(userRepository.findUserById(userBasicId)).thenReturn(new User());
@@ -164,6 +164,7 @@ public class ItemServiceImplTest {
 
     @Test
     void addItem_whenItemRequestIs() {
+        int userBasicId = 0;
 
         ItemRequest itemRequest = new ItemRequest();
         Item itemToSave = new Item();
@@ -180,6 +181,8 @@ public class ItemServiceImplTest {
 
     @Test
     void updateItem_whenItemIsNull() {
+        int userBasicId = 0;
+        int itemBasicId = 0;
 
         when(itemRepository.findItemById(itemBasicId)).thenReturn(null);
         Assertions.assertThrows(ItemNotFoundException.class,
@@ -188,6 +191,8 @@ public class ItemServiceImplTest {
 
     @Test
     void updateItem_whenUserIsNull() {
+        int userBasicId = 0;
+        int itemBasicId = 0;
 
         when(userRepository.findUserById(itemBasicId)).thenReturn(null);
         when(itemRepository.findItemById(itemBasicId)).thenReturn(new Item());
@@ -197,6 +202,8 @@ public class ItemServiceImplTest {
 
     @Test
     void updateItem_whenOtherUser() {
+        int userBasicId = 0;
+        int itemBasicId = 0;
 
         when(userRepository.findUserById(itemBasicId)).thenReturn(new User());
         when(itemRepository.findItemById(itemBasicId)).thenReturn(new Item().setOwner(new User().setId(2)));
@@ -205,7 +212,8 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void updateItem_All() {
+    void updateItem_AllWright() {
+
         Item itemNew = new Item()
                 .setId(1)
                 .setName("1")
@@ -225,6 +233,8 @@ public class ItemServiceImplTest {
 
     @Test
     void findItemById_whenItemIsNull() {
+        int userBasicId = 0;
+        int itemBasicId = 0;
 
         when(itemRepository.findItemById(itemBasicId)).thenReturn(null);
         when(userRepository.findUserById(userBasicId)).thenReturn(new User());
@@ -233,6 +243,8 @@ public class ItemServiceImplTest {
 
     @Test
     void findItemById_whenUserIsNull() {
+        int userBasicId = 0;
+        int itemBasicId = 0;
 
         when(userRepository.findUserById(userBasicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class, () -> itemService.findItemById(userBasicId, itemBasicId));
@@ -259,6 +271,7 @@ public class ItemServiceImplTest {
 
     @Test
     void getAllUserItemsTest_whenUserIsNull() {
+        int userBasicId = 0;
         when(userRepository.findUserById(userBasicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class,
                 () -> itemService.getAllUserItems(userBasicId, 0, 0));
@@ -266,6 +279,7 @@ public class ItemServiceImplTest {
 
     @Test
     void getAllUserItemsTest_withoutCommentAndBooking() {
+
         when(userRepository.findUserById(userFirst.getId())).thenReturn(userFirst);
         when(itemRepository.findItemsByOwnerIdOrderByIdAsc(userFirst.getId(),
                 PageRequest.of(0, 1)))
@@ -327,6 +341,9 @@ public class ItemServiceImplTest {
 
     @Test
     void addComment_whenItemIsNull() {
+        int userBasicId = 0;
+        int itemBasicId = 0;
+
         when(itemRepository.findItemById(itemBasicId)).thenReturn(null);
         Assertions.assertThrows(ValidationException.class,
                 () -> itemService.addComment(userBasicId, itemBasicId,commentFirst.toCommentDto()));
@@ -334,6 +351,8 @@ public class ItemServiceImplTest {
 
     @Test
     void addComment_whenUserIsNull() {
+        int userBasicId = 0;
+        int itemBasicId = 0;
         when(itemRepository.findItemById(itemBasicId)).thenReturn(new Item());
         when(userRepository.findUserById(userBasicId)).thenReturn(null);
         Assertions.assertThrows(ValidationException.class,
@@ -342,6 +361,8 @@ public class ItemServiceImplTest {
 
     @Test
     void addComment_whenBookingIsNull() {
+        int userBasicId = 0;
+        int itemBasicId = 0;
         when(itemRepository.findItemById(itemBasicId)).thenReturn(new Item());
         when(userRepository.findUserById(userBasicId)).thenReturn(new User());
         when(bookingRepository.findFirstBookingsByBookerIdAndItemId(userBasicId, itemBasicId)).thenReturn(null);

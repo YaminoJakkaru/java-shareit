@@ -22,34 +22,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest
-public class UserControllerTest {
+class UserControllerTest {
 
     @Autowired
-    private ObjectMapper objectMapper;
+    ObjectMapper objectMapper;
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
+    UserService userService;
     @MockBean
-    private BookingService bookingService;
+    BookingService bookingService;
     @MockBean
-    private ItemService itemService;
+    ItemService itemService;
     @MockBean
     ItemRequestService itemRequestService;
-
-
-    int userId = 0;
-    User user = new User()
-            .setId(1)
-            .setName("this.getName")
-            .setEmail("this.get@Email.ru");
-
 
     @SneakyThrows
     @Test
     void createTest() {
+        User user = new User()
+                .setId(1)
+                .setName("this.getName")
+                .setEmail("this.get@Email.ru");
         UserDto userEmptyName = new UserDto()
                 .setEmail("this.get@Email.ru");
         UserDto userEmptyEmail = new UserDto()
@@ -83,16 +79,21 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void changeTest() {
+        int userId = 0;
+        User user = new User()
+                .setId(1)
+                .setName("this.getName")
+                .setEmail("this.get@Email.ru");
         User userWrongFirst = new User()
                 .setId(1)
                 .setName("this.getName")
                 .setEmail("this.getEmail.ru");
-        mockMvc.perform(patch("/users/{userId}",userId)
+        mockMvc.perform(patch("/users/{userId}", userId)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(userWrongFirst)))
                 .andExpect(status().isBadRequest());
-        verify(userService, never()).updateUser(userWrongFirst.getId(),userWrongFirst);
-        mockMvc.perform(patch("/users/{userId}",userId)
+        verify(userService, never()).updateUser(userWrongFirst.getId(), userWrongFirst);
+        mockMvc.perform(patch("/users/{userId}", userId)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk());
@@ -110,6 +111,8 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void getUserTest() {
+        int userId = 0;
+
         mockMvc.perform(get("/users/{userId}", userId))
                 .andExpect(status().isOk());
         verify(userService).findUserById(userId);
@@ -118,6 +121,8 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void deleteTest() {
+        int userId = 0;
+
         mockMvc.perform(delete("/users/{userId}", userId))
                 .andExpect(status().isOk());
         verify(userService).deleteUser(userId);

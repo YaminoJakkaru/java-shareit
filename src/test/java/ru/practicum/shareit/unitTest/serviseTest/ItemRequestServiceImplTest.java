@@ -19,25 +19,27 @@ import ru.practicum.shareit.request.service.impl.ItemRequestServiceImpl;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ItemRequestServiceImplTest {
+class ItemRequestServiceImplTest {
 
     @Mock
-    private ItemRequestRepository itemRequestRepository;
+    ItemRequestRepository itemRequestRepository;
     @Mock
-    private ItemRepository itemRepository;
+    ItemRepository itemRepository;
     @Mock
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @InjectMocks
     ItemRequestServiceImpl itemRequestService;
 
-    int basicId = 0;
+
 
     User userFirst = new User()
             .setId(1)
@@ -63,6 +65,7 @@ public class ItemRequestServiceImplTest {
 
     @Test
     void addRequestTest_whenUserIsNull() {
+        int basicId = 0;
         when(userRepository.findUserById(basicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class,
                 () -> itemRequestService.addRequest(basicId, itemRequestFirst.toItemRequestDto()));
@@ -70,6 +73,7 @@ public class ItemRequestServiceImplTest {
 
     @Test
     void addRequestTest_whenAllRight() {
+        int basicId = 0;
         when(userRepository.findUserById(basicId)).thenReturn(userFirst);
         when(itemRequestRepository.save(any())).thenReturn(itemRequestFirst);
         Assertions.assertEquals(itemRequestService.addRequest(basicId, itemRequestFirst.toItemRequestDto()),
@@ -79,6 +83,7 @@ public class ItemRequestServiceImplTest {
 
     @Test
     void findAllByRequestorIdTest_whenUserIsNull() {
+        int basicId = 0;
         when(userRepository.findUserById(basicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class,
                 () -> itemRequestService.findAllByRequestorId(basicId));
@@ -94,7 +99,7 @@ public class ItemRequestServiceImplTest {
         ItemRequestDto itemRequestDto = itemRequestFirst.toItemRequestDto();
         itemRequestDto.addItem(itemFirst);
         Assertions.assertEquals(itemRequestService
-                .findAllByRequestorId(userFirst.getId()),List.of(itemRequestDto));
+                .findAllByRequestorId(userFirst.getId()), List.of(itemRequestDto));
     }
 
     @Test
@@ -107,11 +112,12 @@ public class ItemRequestServiceImplTest {
         ItemRequestDto itemRequestDto = itemRequestFirst.toItemRequestDto();
         itemRequestDto.addItem(itemFirst);
         Assertions.assertEquals(itemRequestService
-                .findAll(userFirst.getId(), 0, 10),List.of(itemRequestDto));
+                .findAll(userFirst.getId(), 0, 10), List.of(itemRequestDto));
     }
 
     @Test
     void findByIdTest_whenUserIsNull() {
+        int basicId = 0;
         when(userRepository.findUserById(basicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class,
                 () -> itemRequestService.findById(basicId, basicId));
@@ -119,6 +125,7 @@ public class ItemRequestServiceImplTest {
 
     @Test
     void findByIdTest_whenItemRequestIsNull() {
+        int basicId = 0;
         when(userRepository.findUserById(basicId)).thenReturn(new User());
         when(itemRequestRepository.findById(basicId)).thenReturn(null);
         Assertions.assertThrows(ItemRequestNotFoundException.class,
@@ -133,6 +140,6 @@ public class ItemRequestServiceImplTest {
         ItemRequestDto itemRequestDto = itemRequestFirst.toItemRequestDto();
         itemRequestDto.addItem(itemFirst);
         Assertions.assertEquals(itemRequestService
-                .findById(userFirst.getId(),itemRequestFirst.getId()), itemRequestDto);
+                .findById(userFirst.getId(), itemRequestFirst.getId()), itemRequestDto);
     }
 }

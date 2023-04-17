@@ -10,8 +10,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
-
-public class BookingTest {
+ class BookingTest {
 
     User user =  new User()
                 .setId(1)

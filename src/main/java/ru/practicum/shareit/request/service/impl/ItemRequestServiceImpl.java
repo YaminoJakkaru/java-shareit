@@ -47,7 +47,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             log.warn("Попытка сделать запрос от имени несуществующего пользователя");
             throw new UserNotFoundException();
         }
-        ItemRequest itemRequest = itemRequestDto.toItemRequest().setRequestor(user).setCreated(LocalDateTime.now());
+        ItemRequest itemRequest = itemRequestDto.toItemRequest().setRequestor(user);
         return itemRequestRepository.save(itemRequest).toItemRequestDto();
     }
 

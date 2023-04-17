@@ -33,29 +33,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ItemControllerTest {
 
     @Autowired
-    private ObjectMapper objectMapper;
+     ObjectMapper objectMapper;
 
     @Autowired
-    private MockMvc mockMvc;
+     MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
+     UserService userService;
     @MockBean
-    private BookingService bookingService;
+     BookingService bookingService;
     @MockBean
-    private ItemService itemService;
+     ItemService itemService;
     @MockBean
     ItemRequestService itemRequestService;
 
     @InjectMocks
-     private ItemController itemController;
+      ItemController itemController;
 
-    int userId = 0;
-    int itemId = 0;
-    int from = 0;
-    int size = 20;
-    String wrongValue = "-1";
-    String rightValue = "1";
+
 
     User userFirst = new User()
             .setId(1)
@@ -81,6 +76,8 @@ public class ItemControllerTest {
     @SneakyThrows
     @Test
     void createItemTest() {
+        int userId = 0;
+
         ItemDto itemEmptyName = new ItemDto()
                 .setName("")
                 .setDescription("text")
@@ -137,6 +134,8 @@ public class ItemControllerTest {
     @SneakyThrows
     @Test
     void changeItemTest() {
+        int userId = 0;
+        int itemId = 0;
 
         mockMvc.perform(patch("/items/{itemId}",itemId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -160,6 +159,9 @@ public class ItemControllerTest {
     @SneakyThrows
     @Test
     void findItemByIdTest() {
+        int userId = 0;
+        int itemId = 0;
+
         mockMvc.perform(get("/items/{itemId}",itemId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -180,6 +182,12 @@ public class ItemControllerTest {
     @SneakyThrows
     @Test
     void getAllUserItemsTest() {
+        int userId = 0;
+        int from = 0;
+        int size = 20;
+        String wrongValue = "-1";
+        String rightValue = "1";
+
         mockMvc.perform(get("/items")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -216,6 +224,11 @@ public class ItemControllerTest {
     @SneakyThrows
     @Test
     void searchItemsTest() {
+        int from = 0;
+        int size = 20;
+        String wrongValue = "-1";
+        String rightValue = "1";
+
         mockMvc.perform(get("/items/search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(itemFirst)))
@@ -251,6 +264,8 @@ public class ItemControllerTest {
     @SneakyThrows
     @Test
     void  createCommentTest() {
+        int userId = 0;
+        int itemId = 0;
 
         CommentDto commentFirst = new CommentDto()
                 .setText("Text");

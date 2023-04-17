@@ -28,30 +28,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-public class BookingControllerTest {
+class BookingControllerTest {
     @Autowired
-    private ObjectMapper objectMapper;
+    ObjectMapper objectMapper;
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
+    UserService userService;
     @MockBean
-    private BookingService bookingService;
+    BookingService bookingService;
     @MockBean
-    private ItemService itemService;
+    ItemService itemService;
     @MockBean
     ItemRequestService itemRequestService;
 
-    int userId = 0;
-    int itemId = 0;
-    int bookingId = 0;
-    int from = 0;
-    int size = 20;
-    String wrongValue = "-1";
-    String rightValue = "1";
-    String state = "ALL";
+
     User userFirst = new User()
             .setId(2)
             .setName("this.getSecondName")
@@ -73,6 +66,7 @@ public class BookingControllerTest {
     @SneakyThrows
     @Test
     void createTest() {
+        int userId = 0;
 
         when(bookingService.addBooking(userId, bookingFirst.toBookingDto())).thenReturn(bookingFirst);
         mockMvc.perform(post("/bookings")
@@ -103,6 +97,10 @@ public class BookingControllerTest {
     @SneakyThrows
     @Test
     void updateStatus() {
+        int userId = 0;
+        int itemId = 0;
+        int bookingId = 0;
+
         when(bookingService.updateStatus(userId, itemId, true)).thenReturn(bookingFirst);
         mockMvc.perform(patch("/bookings/{bookingId}", bookingId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -131,11 +129,14 @@ public class BookingControllerTest {
     @SneakyThrows
     @Test
     void findItemByIdTest() {
+        int userId = 0;
+        int bookingId = 0;
+
         mockMvc.perform(get("/bookings/{bookingId}", bookingId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-        verify(bookingService, never()).findBookingById(userId,bookingId);
-        when(bookingService.findBookingById(userId,bookingId)).thenReturn(bookingFirst);
+        verify(bookingService, never()).findBookingById(userId, bookingId);
+        when(bookingService.findBookingById(userId, bookingId)).thenReturn(bookingFirst);
         String res = mockMvc.perform(get("/bookings/{bookingId}", bookingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userId))
@@ -144,17 +145,24 @@ public class BookingControllerTest {
                 .getResponse()
                 .getContentAsString();
         Assertions.assertEquals(res, objectMapper.writeValueAsString(bookingFirst));
-        verify(bookingService).findBookingById(userId,bookingId);
+        verify(bookingService).findBookingById(userId, bookingId);
     }
 
     @SneakyThrows
     @Test
     void getBookingsByUserIdTest() {
+        int userId = 0;
+        int from = 0;
+        int size = 20;
+        String wrongValue = "-1";
+        String rightValue = "1";
+        String state = "ALL";
+
         mockMvc.perform(get("/bookings")
                         .param("state", "ALL")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-        verify(bookingService, never()).getBookingsByUserId(userId,"ALL",from, size);
+        verify(bookingService, never()).getBookingsByUserId(userId, "ALL", from, size);
 
         mockMvc.perform(get("/bookings")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -162,7 +170,7 @@ public class BookingControllerTest {
                         .param("state", "ALL")
                         .param("from", wrongValue))
                 .andExpect(status().isBadRequest());
-        verify(bookingService, never()).getBookingsByUserId(userId, state,Integer.parseInt(wrongValue), size);
+        verify(bookingService, never()).getBookingsByUserId(userId, state, Integer.parseInt(wrongValue), size);
 
         mockMvc.perform(get("/bookings")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -191,11 +199,18 @@ public class BookingControllerTest {
     @SneakyThrows
     @Test
     void getBookingsByOwnerIdTest() {
+        int userId = 0;
+        int from = 0;
+        int size = 20;
+        String wrongValue = "-1";
+        String rightValue = "1";
+        String state = "ALL";
+
         mockMvc.perform(get("/bookings/owner")
                         .param("state", "ALL")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-        verify(bookingService, never()).getBookingsByItemsOwnerId(userId,"ALL",from, size);
+        verify(bookingService, never()).getBookingsByItemsOwnerId(userId, "ALL", from, size);
 
         mockMvc.perform(get("/bookings/owner")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -203,7 +218,7 @@ public class BookingControllerTest {
                         .param("state", "ALL")
                         .param("from", wrongValue))
                 .andExpect(status().isBadRequest());
-        verify(bookingService, never()).getBookingsByItemsOwnerId(userId, state,Integer.parseInt(wrongValue), size);
+        verify(bookingService, never()).getBookingsByItemsOwnerId(userId, state, Integer.parseInt(wrongValue), size);
 
         mockMvc.perform(get("/bookings/owner")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -12,7 +12,7 @@ import ru.practicum.shareit.user.model.User;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ItemTest {
+ class ItemTest {
 
 
        User user =  new User()

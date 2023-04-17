@@ -42,13 +42,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class IntegrationTest {
+class IntegrationTest {
 
-    private final UserService userService;
-    private final ItemService itemService;
-    private final BookingService bookingService;
+     UserService userService;
+     ItemService itemService;
+     BookingService bookingService;
 
-    private final ItemRequestService itemRequestService;
+     ItemRequestService itemRequestService;
 
     User userFirst = new User()
             .setId(1)

@@ -31,22 +31,20 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BookingServiceImplTest {
+class BookingServiceImplTest {
 
     @Mock
-    private  BookingRepository bookingRepository;
+    BookingRepository bookingRepository;
     @Mock
-    private  UserRepository userRepository;
+    UserRepository userRepository;
     @Mock
-    private  ItemRepository itemRepository;
+    ItemRepository itemRepository;
 
 
     @InjectMocks
     BookingServiceImpl bookingService;
 
-    int userBasicId = 0;
 
-    int bookingBasicId = 0;
     User userFirst = new User()
             .setId(1)
             .setName("this.getName")
@@ -90,6 +88,8 @@ public class BookingServiceImplTest {
 
     @Test
     void addBookingTest_whenUserIsNull() {
+        int userBasicId = 0;
+
         when(itemRepository.findItemById(itemSecond.getId())).thenReturn(itemSecond);
         when(userRepository.findUserById(userBasicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class,
@@ -104,7 +104,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-     void addBookingTest_whenIsNotAvailable() {
+    void addBookingTest_whenIsNotAvailable() {
         when(itemRepository.findItemById(anyInt())).thenReturn(new Item().setAvailable(false).setOwner(userSecond));
         when(userRepository.findUserById(anyInt())).thenReturn(userFirst);
         Assertions.assertThrows(ValidationException.class, () -> bookingService.addBooking(userFirst.getId(),
@@ -123,23 +123,29 @@ public class BookingServiceImplTest {
 
     @Test
     void updateStatusTest_whenBookingIsNull() {
+        int userBasicId = 0;
+        int bookingBasicId = 0;
         when(bookingRepository.findBookingById(anyInt())).thenReturn(null);
         Assertions.assertThrows(BookingNotFoundException.class,
-                () -> bookingService.updateStatus(userBasicId,bookingBasicId,true));
+                () -> bookingService.updateStatus(userBasicId, bookingBasicId, true));
     }
 
     @Test
     void updateStatusTest_whenApproved() {
+        int userBasicId = 0;
+        int bookingBasicId = 0;
         when(bookingRepository.findBookingById(anyInt())).thenReturn(new Booking().setStatus(Status.APPROVED));
         Assertions.assertThrows(ValidationException.class,
-                () -> bookingService.updateStatus(userBasicId,bookingBasicId,true));
+                () -> bookingService.updateStatus(userBasicId, bookingBasicId, true));
     }
 
     @Test
     void updateStatusTest_whenUserIsNotOwner() {
+        int userBasicId = 0;
+        int bookingBasicId = 0;
         when(bookingRepository.findBookingById(anyInt())).thenReturn(bookingFirst);
         Assertions.assertThrows(UserNotFoundException.class,
-                () -> bookingService.updateStatus(userBasicId,bookingBasicId,true));
+                () -> bookingService.updateStatus(userBasicId, bookingBasicId, true));
     }
 
     @Test
@@ -147,37 +153,43 @@ public class BookingServiceImplTest {
         when(bookingRepository.findBookingById(anyInt())).thenReturn(bookingFirst);
         when(bookingRepository.save(any())).thenReturn(bookingFirst);
         Assertions.assertEquals(bookingService
-                        .updateStatus(userSecond.getId(),bookingFirst.getId(),true), bookingFirst);
+                .updateStatus(userSecond.getId(), bookingFirst.getId(), true), bookingFirst);
     }
 
     @Test
     void findBookingByIdTest_whenBookingIsNull() {
+        int userBasicId = 0;
+        int bookingBasicId = 0;
         when(bookingRepository.findBookingById(anyInt())).thenReturn(null);
         Assertions.assertThrows(BookingNotFoundException.class,
-                () -> bookingService.findBookingById(userBasicId,bookingBasicId));
+                () -> bookingService.findBookingById(userBasicId, bookingBasicId));
     }
 
     @Test
     void findBookingByIdTest_whenUserIsNotBookerAndNotOwner() {
+        int userBasicId = 0;
+        int bookingBasicId = 0;
         when(bookingRepository.findBookingById(anyInt())).thenReturn(bookingFirst);
         Assertions.assertThrows(UserNotFoundException.class,
-                () -> bookingService.findBookingById(userBasicId,bookingBasicId));
+                () -> bookingService.findBookingById(userBasicId, bookingBasicId));
     }
 
     @Test
     void findBookingByIdTest_whenIsBooker() {
         when(bookingRepository.findBookingById(anyInt())).thenReturn(bookingFirst);
-        Assertions.assertEquals(bookingService.findBookingById(userFirst.getId(),bookingFirst.getId()), bookingFirst);
+        Assertions.assertEquals(bookingService.findBookingById(userFirst.getId(), bookingFirst.getId()), bookingFirst);
     }
 
     @Test
     void findBookingByIdTest_whenIsOwner() {
         when(bookingRepository.findBookingById(anyInt())).thenReturn(bookingFirst);
-        Assertions.assertEquals(bookingService.findBookingById(userSecond.getId(),bookingFirst.getId()), bookingFirst);
+        Assertions.assertEquals(bookingService.findBookingById(userSecond.getId(), bookingFirst.getId()), bookingFirst);
     }
 
     @Test
     void getBookingsByUserIdTest_WhenUserIsNull() {
+        int userBasicId = 0;
+
         when(userRepository.findUserById(userBasicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class,
                 () -> bookingService.getBookingsByUserId(userBasicId, "ALL", 0, 1));
@@ -250,6 +262,8 @@ public class BookingServiceImplTest {
 
     @Test
     void getBookingsByItemsOwnerIdTest_WhenUserIsNull() {
+        int userBasicId = 0;
+
         when(userRepository.findUserById(userBasicId)).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class,
                 () -> bookingService.getBookingsByItemsOwnerId(userBasicId, "ALL", 0, 1));
