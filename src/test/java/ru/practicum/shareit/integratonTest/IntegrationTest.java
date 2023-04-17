@@ -44,11 +44,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class IntegrationTest {
 
-     UserService userService;
-     ItemService itemService;
-     BookingService bookingService;
+     final UserService userService;
+     final ItemService itemService;
+     final BookingService bookingService;
 
-     ItemRequestService itemRequestService;
+     final ItemRequestService itemRequestService;
 
     User userFirst = new User()
             .setId(1)

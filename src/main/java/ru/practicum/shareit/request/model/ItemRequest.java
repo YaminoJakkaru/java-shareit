@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -24,6 +25,7 @@ public class ItemRequest {
     private User requestor;
 
     @Column(name = "created_date")
+    @CreationTimestamp
     private LocalDateTime created;
 
     public ItemRequestDto toItemRequestDto() {
