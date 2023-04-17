@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingRepository;
@@ -15,6 +16,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
@@ -36,24 +38,31 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
 
+    private final ItemRequestRepository itemRequestRepository;
+
     @Autowired
-    public ItemServiceImpl(UserRepository userRepository, ItemRepository itemRepository, BookingRepository bookingRepository, CommentRepository commentRepository) {
+    public ItemServiceImpl(UserRepository userRepository, ItemRepository itemRepository, BookingRepository bookingRepository, CommentRepository commentRepository, ItemRequestRepository itemRequestRepository) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.bookingRepository = bookingRepository;
         this.commentRepository = commentRepository;
+        this.itemRequestRepository = itemRequestRepository;
     }
 
     @Override
     @Transactional
-    public Item addItem(int userId, Item item) {
+    public ItemDto addItem(int userId, ItemDto itemDto) {
         User user = userRepository.findUserById(userId);
         if (user == null) {
             log.warn("Попытка получить несучествующий аккаунт");
             throw new UserNotFoundException();
         }
+        Item item = itemDto.toItem();
+        if (itemDto.getRequestId() != null) {
+            item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()));
+        }
         item.setOwner(user);
-        return itemRepository.save(item);
+        return itemRepository.save(item).toItemDto();
     }
 
     @Override
@@ -83,6 +92,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto findItemById(int userId, int itemId) {
+        User user = userRepository.findUserById(userId);
+        if (user == null) {
+            log.warn("Попытка получить данные придмета без прав доступа");
+            throw new UserNotFoundException();
+        }
         Item item = itemRepository.findItemById(itemId);
         if (item == null) {
             log.warn("Попытка получить данные несуществующего предмета");
@@ -97,8 +111,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getAllUserItems(int userId) {
-        Map<Integer, ItemDto> items = itemRepository.findItemsByOwnerIdOrderByIdAsc(userId)
+    public List<ItemDto> getAllUserItems(int userId, int from, int size) {
+
+        User user = userRepository.findUserById(userId);
+        if (user == null) {
+            log.warn("Попытка получить данные придметов без прав доступа");
+            throw new UserNotFoundException();
+        }
+        Map<Integer, ItemDto> items = itemRepository.findItemsByOwnerIdOrderByIdAsc(userId,
+                        PageRequest.of(from > 0 ? from / size : 0, size))
                 .stream()
                 .collect(Collectors.toMap(Item::getId, Item::toItemDto));
         List<Booking> allBookings = bookingRepository.findBookingsByItemOwnerIdAndStatusIsNot(userId, Status.REJECTED);
@@ -123,9 +144,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItems(String text) {
+    public List<ItemDto> searchItems(String text, int from, int size) {
+
         return text.isBlank() ? List.of() : itemRepository
-                .findItemByNameOrDescriptionContainsIgnoreCaseAndAvailableIsTrue(text, text)
+                .findItemByNameOrDescriptionContainsIgnoreCaseAndAvailableIsTrue(text, text,
+                        PageRequest.of(from > 0 ? from / size : 0, size))
                 .stream()
                 .map(Item::toItemDto)
                 .collect(Collectors.toList());

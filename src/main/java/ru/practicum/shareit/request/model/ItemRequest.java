@@ -1,8 +1,13 @@
 package ru.practicum.shareit.request.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.model.User;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
@@ -11,8 +16,22 @@ import javax.persistence.*;
 public class ItemRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-    String description;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    User requestor;
+    private int id;
+
+    private String description;
+    @ManyToOne
+    @JoinColumn(name = "requestor_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User requestor;
+
+    @Column(name = "created_date")
+    @CreationTimestamp
+    private LocalDateTime created;
+
+    public ItemRequestDto toItemRequestDto() {
+        return new ItemRequestDto()
+                .setId(this.getId())
+                .setDescription(this.getDescription())
+                .setCreated(this.getCreated());
+    }
 }

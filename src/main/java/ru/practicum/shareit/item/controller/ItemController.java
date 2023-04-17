@@ -6,6 +6,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class ItemController {
     }
 
     @PostMapping
-    public Item createItem(@RequestHeader("X-Sharer-User-Id") int userId, @RequestBody @Valid ItemDto itemDto) {
-        return itemService.addItem(userId, itemDto.toItem());
+    public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") int userId, @RequestBody @Valid ItemDto itemDto) {
+        return itemService.addItem(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
@@ -37,13 +38,23 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getAllUserItems(@RequestHeader("X-Sharer-User-Id") @NotNull int userId) {
-        return itemService.getAllUserItems(userId);
+    public List<ItemDto> getAllUserItems(@RequestHeader("X-Sharer-User-Id") @NotNull int userId,
+                                         @RequestParam(defaultValue = "0")  int from,
+                                         @RequestParam(defaultValue = "20")  int size) {
+        if (from < 0 || size < 0) {
+            throw  new ValidationException();
+        }
+        return itemService.getAllUserItems(userId, from, size);
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestParam String text) {
-        return itemService.searchItems(text);
+    public List<ItemDto> searchItems(@RequestParam String text,
+                                     @RequestParam(defaultValue = "0")  int from,
+                                     @RequestParam(defaultValue = "20")  int size) {
+        if (from < 0 || size < 0) {
+            throw  new ValidationException();
+        }
+        return itemService.searchItems(text, from, size);
     }
 
     @PostMapping("/{itemId}/comment")

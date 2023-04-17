@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.model;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
@@ -26,9 +28,11 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User owner;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ItemRequest request;
 
     public ItemDto toItemDto() {
@@ -38,6 +42,6 @@ public class Item {
                 .setDescription(this.getDescription())
                 .setOwner(this.getOwner())
                 .setAvailable(this.getAvailable())
-                .setRequest(this.getRequest());
+                .setRequestId(this.getRequest() == null ? null : this.getRequest().getId());
     }
 }

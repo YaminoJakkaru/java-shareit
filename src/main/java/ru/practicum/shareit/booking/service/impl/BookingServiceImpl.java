@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingRepository;
@@ -21,6 +22,7 @@ import ru.practicum.shareit.user.model.User;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -99,7 +101,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getBookingsByUserId(int bookerId, String state) {
+    public List<Booking> getBookingsByUserId(int bookerId, String state, int from, int size) {
         User user = userRepository.findUserById(bookerId);
         if (user == null) {
             log.warn("Попытка получить несучествующий аккаунт");
@@ -107,28 +109,35 @@ public class BookingServiceImpl implements BookingService {
         }
         switch (State.valueOf(state)) {
             case ALL:
-                return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookerId);
+                return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookerId,
+                        PageRequest.of(from > 0 ? from / size : 0, size)).stream().collect(Collectors.toList());
             case CURRENT:
                 return bookingRepository
                         .findBookingsByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(bookerId,
-                                LocalDateTime.now(), LocalDateTime.now());
+                                LocalDateTime.now(), LocalDateTime.now(),
+                                PageRequest.of(from > 0 ? from / size : 0, size)).stream().collect(Collectors.toList());
             case PAST:
                 return bookingRepository
-                        .findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(bookerId, LocalDateTime.now());
+                        .findBookingsByBookerIdAndEndIsBeforeOrderByIdDesc(bookerId, LocalDateTime.now(),
+                                PageRequest.of(from > 0 ? from / size : 0, size)).stream().collect(Collectors.toList());
             case FUTURE:
                 return bookingRepository
-                        .findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(bookerId, LocalDateTime.now());
+                        .findBookingsByBookerIdAndStartIsAfterOrderByIdDesc(bookerId, LocalDateTime.now(),
+                                PageRequest.of(from > 0 ? from / size : 0, size)).stream().collect(Collectors.toList());
             case WAITING:
-                return bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId, Status.WAITING);
+                return bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId, Status.WAITING,
+                        PageRequest.of(from > 0 ? from / size : 0, size)).stream().collect(Collectors.toList());
             case REJECTED:
-                return bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId, Status.REJECTED);
+                return bookingRepository.findBookingsByBookerIdAndStatusIsOrderByIdDesc(bookerId,
+                        Status.REJECTED, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+                        .collect(Collectors.toList());
             default:
                 return null;
         }
     }
 
     @Override
-    public List<Booking> getBookingsByItemsOwnerId(int ownerId, String state) {
+    public List<Booking> getBookingsByItemsOwnerId(int ownerId, String state, int from, int size) {
         User user = userRepository.findUserById(ownerId);
         if (user == null) {
             log.warn("Попытка получить несучествующий аккаунт");
@@ -136,21 +145,30 @@ public class BookingServiceImpl implements BookingService {
         }
         switch (State.valueOf(state)) {
             case ALL:
-                return bookingRepository.findBookingsByItemOwnerIdOrderByIdDesc(ownerId);
+                return bookingRepository.findBookingsByItemOwnerIdOrderByIdDesc(ownerId,
+                        PageRequest.of(from > 0 ? from / size : 0, size)).stream().collect(Collectors.toList());
             case CURRENT:
                 return bookingRepository
                         .findBookingsByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(ownerId,
-                                LocalDateTime.now(), LocalDateTime.now());
+                                LocalDateTime.now(),
+                                 LocalDateTime.now(), PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+                        .collect(Collectors.toList());
             case PAST:
                 return bookingRepository.findBookingsByItemOwnerIdAndEndIsBeforeOrderByIdDesc(ownerId,
-                        LocalDateTime.now());
+                        LocalDateTime.now(), PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+                        .collect(Collectors.toList());
             case FUTURE:
                 return bookingRepository.findBookingsByItemOwnerIdAndStartIsAfterOrderByIdDesc(ownerId,
-                        LocalDateTime.now());
+                        LocalDateTime.now(), PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+                        .collect(Collectors.toList());
             case WAITING:
-                return bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId, Status.WAITING);
+                return bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId, Status.WAITING,
+                        PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+                        .collect(Collectors.toList());
             case REJECTED:
-                return bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId, Status.REJECTED);
+                return bookingRepository.findBookingsByItemOwnerIdAndStatusIsOrderByIdDesc(ownerId, Status.REJECTED,
+                        PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+                        .collect(Collectors.toList());
             default:
                 return null;
         }

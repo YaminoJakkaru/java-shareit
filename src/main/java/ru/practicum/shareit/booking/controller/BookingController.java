@@ -7,6 +7,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -40,13 +41,23 @@ public class BookingController {
 
     @GetMapping
     public List<Booking> getBookingsByUserId(@RequestHeader("X-Sharer-User-Id") int userId,
-                                             @RequestParam(defaultValue = "ALL") String state) {
-        return bookingService.getBookingsByUserId(userId, state);
+                                             @RequestParam(defaultValue = "ALL") String state,
+                                             @RequestParam(defaultValue = "0")  int from,
+                                             @RequestParam(defaultValue = "20")  int size) {
+        if (from < 0 || size < 0) {
+            throw  new ValidationException();
+        }
+        return bookingService.getBookingsByUserId(userId, state, from, size);
     }
 
     @GetMapping("/owner")
     List<Booking> getBookingsByOwnerId(@RequestHeader("X-Sharer-User-Id") int userId,
-                                       @RequestParam(defaultValue = "ALL") String state) {
-        return bookingService.getBookingsByItemsOwnerId(userId, state);
+                                       @RequestParam(defaultValue = "ALL") String state,
+                                       @RequestParam(defaultValue = "0")  int from,
+                                       @RequestParam(defaultValue = "20")  int size) {
+        if (from < 0 || size < 0) {
+            throw  new ValidationException();
+        }
+        return bookingService.getBookingsByItemsOwnerId(userId, state, from, size);
     }
 }

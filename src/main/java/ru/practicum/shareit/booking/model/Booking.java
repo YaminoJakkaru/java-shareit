@@ -2,6 +2,8 @@ package ru.practicum.shareit.booking.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.vo.Status;
 import ru.practicum.shareit.item.model.Item;
@@ -27,10 +29,12 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Item item;
 
     @ManyToOne
     @JoinColumn(name = "booker_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User booker;
 
     @Enumerated(EnumType.STRING)

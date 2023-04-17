@@ -32,10 +32,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User updateUser(int useId, User newUser) {
-        User user = userRepository.findUserById(useId);
+    public User updateUser(int userId, User newUser) {
+        User user = userRepository.findUserById(userId);
         if (user == null) {
-            log.warn("Попытка изменить несуществующий аккаунт:" + useId);
+            log.warn("Попытка изменить несуществующий аккаунт:" + userId);
             throw new UserNotFoundException();
         }
         if (newUser.getName() != null && !newUser.getName().isBlank() && !newUser.getName().equals(user.getName())) {
