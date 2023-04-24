@@ -8,9 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -26,7 +24,6 @@ public class ItemController {
     public ItemController(ItemClient itemClient) {
         this.itemClient = itemClient;
     }
-
 
     @PostMapping
     public ResponseEntity<Object> createItem(@RequestHeader("X-Sharer-User-Id") int userId,
