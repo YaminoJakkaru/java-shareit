@@ -8,10 +8,7 @@ import ru.practicum.shareit.request.exception.ItemRequestNotFoundException;
 import ru.practicum.shareit.user.exception.EmailException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import org.postgresql.util.PSQLException;
-
-
 import javax.validation.ValidationException;
-import java.util.Map;
 import java.util.Objects;
 
 @RestControllerAdvice

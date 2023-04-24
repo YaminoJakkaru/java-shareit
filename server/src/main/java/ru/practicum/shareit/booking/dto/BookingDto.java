@@ -4,9 +4,6 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.vo.Status;
-
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
