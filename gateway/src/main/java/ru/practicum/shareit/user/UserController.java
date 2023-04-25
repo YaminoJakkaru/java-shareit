@@ -10,6 +10,7 @@ import ru.practicum.shareit.user.dto.CreatedUserDto;
 import ru.practicum.shareit.user.dto.UpdatedUserDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 @Controller
 @RequestMapping(path = "/users")
@@ -31,14 +32,14 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<Object> changeUser(@PathVariable long userId, @RequestBody @Valid UpdatedUserDto userDto) {
+    public ResponseEntity<Object> changeUser(@PathVariable @Positive long userId, @RequestBody @Valid UpdatedUserDto userDto) {
         log.info("Updating user {}", userId);
         return userClient.changeUser(userId, userDto);
     }
 
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> getUserById(@PathVariable long userId) {
+    public ResponseEntity<Object> getUserById(@PathVariable @Positive long userId) {
         log.info("Getting user {}", userId);
         return userClient.getUserById(userId);
     }
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> deleteUserById(@PathVariable long userId) {
+    public ResponseEntity<Object> deleteUserById(@PathVariable @Positive long userId) {
         log.info("Deleting user {}", userId);
         return userClient.deleteUserById(userId);
     }

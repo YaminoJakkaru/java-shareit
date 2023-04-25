@@ -3,11 +3,11 @@ package ru.practicum.shareit.item.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Accessors(chain = true)
 @Data
 public class CommentDto {
-    @NotEmpty
+    @NotBlank
     private String text;
 }
